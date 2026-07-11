@@ -1,0 +1,49 @@
+.font-michroma {
+  font-family: 'Michroma', sans-serif;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-message pre {
+  background: rgb(var(--auri-card));
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+.chat-message code {
+  font-size: 0.85em;
+}
+
+.chat-message ul, .chat-message ol {
+  padding-left: 1.5em;
+  margin: 8px 0;
+}
+
+.chat-message p {
+  margin: 4px 0;
+}
+
+.chat-message table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.chat-message th, .chat-message td {
+  border: 1px solid rgb(var(--auri-border));
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.chat-message th {
+  background: rgb(var(--auri-card));
+}

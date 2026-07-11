@@ -1,0 +1,48 @@
+// Predictive Signals — Command Center & NOVA.
+
+export const PREDICTIVE_SIGNALS = [
+  {
+    id: 'ps-1',
+    agent: 'LUCA',
+    signal: 'Elena Zamagni bispecific advocacy expanding to EU MM network',
+    currentState: 'Zamagni alignment at 44 (from 69 in 60 days). Two public posts on LinkedIn/X and one HemaSphere publication comparing Blenrep keratopathy unfavourably to bispecific CRS. Italian MM network follows Zamagni closely — her framing is seeding into European congresses.',
+    trajectory: 'rising',
+    timeToImpact: '0–3 months',
+    confidence: 'high',
+    requiredAction: 'Scientific exchange with Zamagni on DREAMM-7 OS data + keratopathy management protocol. Do not leave another 10-week gap. Simultaneously engage Lonial as a counter-voice in EU communications.',
+    suggestedAction: { label: 'Open in LUCA', path: '/kol' },
+  },
+  {
+    id: 'ps-2',
+    agent: 'ARIA',
+    signal: 'Dupilumab EGPA label expansion — Phase III results expected Q3 2026',
+    currentState: 'Dupixent (dupilumab) is running a Phase III EGPA programme with results expected Q3 2026. EGPA is a Nucala anchor indication; an approved dupilumab EGPA label would directly challenge the T2 indication breadth differentiation strategy.',
+    trajectory: 'rising',
+    timeToImpact: '0–6 months',
+    confidence: 'high',
+    requiredAction: 'Accelerate Nucala EGPA KOL engagement and eosinophil-guided patient identification messaging before Dupixent data arrives. A3 and A4 both address this — A4 needs owner assignment.',
+    suggestedAction: { label: 'Open in ARIA', path: '/congress' },
+  },
+  {
+    id: 'ps-3',
+    agent: 'NOVA',
+    signal: 'Blenrep KOL confidence rebuild — 6-month window post-readmission',
+    currentState: 'DREAMM-7 and DREAMM-8 have reset the Blenrep evidence base with OS and PFS benefits. The readmission narrative is present in academic KOL circles but has not reached community MM oncologists. The 6-month window before bispecific narrative fully displaces ADC preference is open.',
+    trajectory: 'rising',
+    timeToImpact: '3–6 months',
+    confidence: 'medium',
+    requiredAction: 'Deploy A8 (DREAMM-7 OS briefing card) to community oncologists immediately. A1 (keratopathy vs CRS guide) must reach MSLs before next major MM symposium.',
+    suggestedAction: { label: 'Review in NOVA', path: '/insights' },
+  },
+  {
+    id: 'ps-4',
+    agent: 'NOVA',
+    signal: 'dMMR pan-tumor testing adoption — FDA tumor-agnostic expansion accelerating',
+    currentState: 'Pembrolizumab tumor-agnostic approval for dMMR/MSI-H solid tumors is normalising testing expectations across oncology. Testing is expanding but Jemperli awareness outside GYN oncology lags. Window to establish Jemperli presence before testing is commoditised is 3–9 months.',
+    trajectory: 'rising',
+    timeToImpact: '3–9 months',
+    confidence: 'medium',
+    requiredAction: 'Activate A5 (GI tumor board engagement) and A6 (pan-tumor educational toolkit) in Q4 2026. Assign owners and budget before ESMO 2026 where pan-tumor dMMR data will feature prominently.',
+    suggestedAction: { label: 'Review in NOVA', path: '/insights' },
+  },
+];

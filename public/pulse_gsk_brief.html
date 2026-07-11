@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSK · Pulse Intelligence · July 11, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:     #F5F0E9;
+  --paper:     #EDE8DC;
+  --paper-dk:  #E4DECE;
+  --ink:       #1A1612;
+  --ink-mid:   #3D3530;
+  --ink-lt:    #7A6E65;
+  --rule:      #D4CEC4;
+  --teal:      #0D6E6E;
+  --teal-lt:   #1A8B9B;
+  --amber:     #B5540A;
+  --amber-lt:  #E8780F;
+  --rose:      #8B2635;
+  --sage:      #4A6741;
+  --purple:    #5B3F7E;
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+  --font-mono:  'DM Mono', 'IBM Plex Mono', monospace;
+  --font-sans:  'DM Sans', 'Inter', -apple-system, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--cream);
+  color: var(--ink);
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--paper); }
+::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--teal); }
+
+/* ── SHELL ─────────────────────────────────── */
+#shell {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  grid-template-rows: 48px 1fr;
+  grid-template-areas: "topbar topbar" "sidebar main";
+  height: 100vh;
+  overflow: hidden;
+  transition: grid-template-columns 0.22s ease;
+}
+#shell.collapsed { grid-template-columns: 0px 1fr; }
+
+/* ── TOPBAR ────────────────────────────────── */
+#topbar {
+  grid-area: topbar;
+  background: rgba(245,240,232,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+.topbar-left  { display: flex; align-items: center; gap: 10px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.topbar-wordmark { font-family: 'Michroma', sans-serif; font-size: 13px; color: var(--ink); letter-spacing: 0.06em; }
+.topbar-wordmark span { color: var(--teal); }
+.topbar-divider { width: 1px; height: 18px; background: var(--rule); }
+.topbar-product { font-size: 10px; font-weight: 500; color: var(--ink-lt); letter-spacing: 0.06em; text-transform: uppercase; }
+.gsk-chip { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; background: rgba(13,110,110,0.10); border: 1px solid rgba(13,110,110,0.30); color: var(--teal); }
+.topbar-date { font-size: 10px; color: var(--ink-lt); letter-spacing: 0.03em; }
+
+.btn-listen {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(13,110,110,0.08); border: 1px solid var(--teal);
+  border-radius: 5px; padding: 5px 10px;
+  font-family: var(--font-sans); font-size: 10px; font-weight: 500;
+  color: var(--teal); letter-spacing: 0.04em; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-listen:hover { background: rgba(13,110,110,0.15); }
+.btn-listen.playing { background: rgba(13,110,110,0.15); }
+.listen-dot { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite; }
+
+/* ── AUDIO BAR ─────────────────────────────── */
+#audio-bar {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+  background: var(--ink); border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 20px;
+  align-items: center; gap: 14px;
+}
+#audio-bar.open { display: flex; }
+.audio-play-btn { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: var(--teal); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s; }
+.audio-play-btn:hover { opacity: 0.85; }
+.audio-play-icon { font-size: 11px; color: #fff; margin-left: 2px; }
+.audio-pause-icon { font-size: 11px; color: #fff; }
+.audio-meta { display: flex; flex-direction: column; gap: 1px; min-width: 180px; }
+.audio-title { font-size: 11px; font-weight: 600; color: var(--cream); }
+.audio-subtitle { font-size: 9px; color: rgba(245,240,232,0.55); }
+.audio-progress-wrap { flex: 1; display: flex; align-items: center; gap: 10px; }
+.audio-track { flex: 1; height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; cursor: pointer; position: relative; }
+.audio-fill { height: 100%; background: var(--teal); border-radius: 2px; width: 0%; transition: width 0.25s linear; }
+.audio-time { font-size: 9px; color: rgba(245,240,232,0.55); white-space: nowrap; min-width: 80px; text-align: right; }
+.audio-close { background: none; border: none; color: rgba(245,240,232,0.5); cursor: pointer; font-size: 16px; line-height: 1; padding: 4px; transition: color 0.15s; }
+.audio-close:hover { color: var(--cream); }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── SIDEBAR TOGGLE ────────────────────────── */
+#sidebar-toggle {
+  position: fixed; left: 220px; top: 50%; transform: translateY(-50%);
+  width: 14px; height: 36px;
+  background: var(--paper); border: 1px solid var(--rule); border-left: none;
+  border-radius: 0 4px 4px 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: var(--ink-lt);
+  z-index: 200; transition: left 0.22s ease;
+}
+#shell.collapsed #sidebar-toggle { left: 0px; }
+
+/* ── SIDEBAR ───────────────────────────────── */
+#sidebar { grid-area: sidebar; background: var(--paper); border-right: 1px solid var(--rule); overflow-y: auto; overflow-x: hidden; transition: opacity 0.2s ease; }
+#shell.collapsed #sidebar { opacity: 0; pointer-events: none; }
+.sidebar-inner { padding: 12px 0; min-width: 232px; }
+.sidebar-section-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-lt); padding: 0 12px 6px; margin-top: 10px; }
+.brief-card { padding: 9px 12px; cursor: pointer; border-left: 2px solid transparent; transition: background 0.13s; position: relative; }
+.brief-card:hover { background: rgba(13,110,110,0.04); }
+.brief-card.active { border-left-color: var(--teal); background: rgba(13,110,110,0.06); }
+.brief-card-title { font-size: 11px; font-weight: 500; color: var(--ink-mid); line-height: 1.4; margin-bottom: 2px; }
+.brief-card.active .brief-card-title { color: var(--ink); }
+.brief-card-meta { font-size: 9px; color: var(--ink-lt); letter-spacing: 0.02em; }
+.new-dot { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; position: absolute; top: 9px; right: 10px; animation: pulse-dot 2.5s ease-in-out infinite; }
+.sidebar-rule { height: 1px; background: var(--rule); margin: 10px 12px; }
+.nav-item { display: flex; align-items: center; gap: 7px; padding: 7px 12px; cursor: pointer; font-size: 11px; font-weight: 500; color: var(--ink-lt); transition: background 0.13s, color 0.13s; text-decoration: none; }
+.nav-item:hover { background: rgba(13,110,110,0.04); color: var(--ink); }
+.nav-item.active { color: var(--teal); background: rgba(13,110,110,0.06); border-left: 2px solid var(--teal); }
+.nav-icon { font-size: 12px; width: 14px; text-align: center; opacity: 0.7; }
+.nav-item.active .nav-icon { opacity: 1; }
+
+/* ── MAIN ──────────────────────────────────── */
+#main { grid-area: main; overflow-y: auto; background: var(--cream); }
+.view { display: none; }
+.view.active { display: block; }
+.brief-content { display: none; }
+.brief-content.active { display: block; }
+
+/* ── BRIEF ARTICLE ─────────────────────────── */
+.brief-eyebrow { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.tag { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+.tag-outline { border: 1px solid var(--teal); color: var(--teal); }
+.tag-filled  { background: var(--teal); color: #fff; }
+.tag-product { background: rgba(13,110,110,0.10); border: 1px solid rgba(13,110,110,0.30); color: var(--teal); }
+.tag-alert   { background: rgba(181,84,10,0.10); border: 1px solid rgba(181,84,10,0.30); color: var(--amber); }
+.eyebrow-date { margin-left: auto; font-size: 10px; color: var(--ink-lt); }
+
+.brief-headline { font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.4; letter-spacing: -0.01em; margin-bottom: 14px; }
+.brief-headline em { color: var(--teal); font-style: italic; }
+.brief-lede { font-size: 13px; font-weight: 400; color: var(--ink-mid); line-height: 1.85; max-width: 64ch; margin-bottom: 16px; }
+
+.brief-meta { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 12px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 22px; }
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-label { font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-lt); }
+.meta-value { font-size: 12px; font-weight: 600; color: var(--teal); }
+.meta-value.warn { color: var(--amber); }
+.meta-value.dim  { color: var(--ink-mid); font-weight: 400; }
+
+.situation-room { background: var(--paper); border: 1px solid var(--rule); border-top: 2px solid var(--teal); border-radius: 8px; padding: 18px 20px; margin-bottom: 28px; }
+.situation-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
+.situation-body { font-size: 13px; line-height: 1.8; color: var(--ink-mid); }
+.situation-body strong { color: var(--ink); font-weight: 600; }
+
+.section-rule { height: 1px; background: var(--rule); margin: 28px 0; }
+.brief-section { opacity: 0; transform: translateY(8px); animation: fadeUp 0.35s ease forwards; }
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+.section-number { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.section-num { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--teal); display: flex; align-items: center; gap: 6px; }
+.section-num::before { content: ''; display: inline-block; width: 16px; height: 1px; background: var(--teal); opacity: 0.4; }
+.section-cat { font-size: 9px; font-weight: 500; color: var(--ink-lt); letter-spacing: 0.06em; text-transform: uppercase; }
+.section-h2 { font-family: var(--font-serif); font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.45; margin-bottom: 10px; }
+.section-h2 em { color: var(--teal); font-style: italic; }
+.section-h2 strong { color: var(--rose); }
+
+.pills { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+.pill { font-size: 8px; font-weight: 600; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 3px; border: 1px solid; }
+.pill-hot   { background: rgba(181,84,10,0.08);  border-color: rgba(181,84,10,0.35);  color: var(--amber); }
+.pill-alert { background: rgba(139,38,53,0.08);  border-color: rgba(139,38,53,0.35);  color: var(--rose); }
+.pill-watch { background: rgba(13,110,110,0.08); border-color: rgba(13,110,110,0.35); color: var(--teal); }
+.pill-new   { background: rgba(74,103,65,0.08);  border-color: rgba(74,103,65,0.35);  color: var(--sage); }
+
+.section-body { font-size: 13px; line-height: 1.85; color: var(--ink-mid); margin-bottom: 14px; }
+
+.pull-quote { border-left: 3px solid var(--teal); background: var(--paper); padding: 14px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; }
+.pull-quote-text { font-family: var(--font-serif); font-style: italic; font-size: 13px; line-height: 1.7; color: var(--ink); margin-bottom: 6px; }
+.pull-quote-cite { font-size: 9px; color: var(--ink-lt); letter-spacing: 0.04em; }
+
+.alert-box { background: rgba(181,84,10,0.06); border: 1px solid rgba(181,84,10,0.25); border-left: 3px solid var(--amber); border-radius: 6px; padding: 14px 16px; margin: 14px 0; }
+.alert-label { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; }
+.alert-text { font-size: 12px; line-height: 1.7; color: var(--ink-mid); }
+.alert-text strong { color: var(--ink); }
+
+.sources { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+.source-chip { font-size: 9px; font-weight: 500; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink-lt); text-decoration: none; transition: border-color 0.13s, color 0.13s; cursor: pointer; }
+.source-chip:hover { border-color: var(--teal); color: var(--teal); }
+
+.fvq { margin-top: 14px; padding: 12px 14px; background: rgba(13,110,110,0.04); border: 1px dashed rgba(13,110,110,0.25); border-radius: 6px; }
+.fvq-label { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+.fvq-text { font-size: 12px; line-height: 1.7; color: var(--ink-mid); }
+
+/* Comparison table */
+.comp-matrix { width: 100%; border-collapse: collapse; font-size: 11px; margin: 14px 0; }
+.comp-matrix th { font-size: 9px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-lt); padding: 6px 10px; background: var(--paper-dk); border: 1px solid var(--rule); text-align: left; }
+.comp-matrix td { padding: 7px 10px; border: 1px solid var(--rule); color: var(--ink-mid); vertical-align: middle; }
+.comp-matrix tr.hl td { background: rgba(13,110,110,0.05); font-weight: 500; color: var(--ink); }
+.chk { color: var(--teal); font-weight: 700; }
+.crs { color: var(--rose); font-weight: 700; }
+
+/* Bottom line */
+.bottom-line { background: var(--paper); border: 1px solid var(--rule); border-top: 2px solid var(--ink); border-radius: 8px; padding: 18px 20px; margin-top: 28px; }
+.bottom-line-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.bottom-line-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); }
+.bottom-line-items { display: flex; flex-direction: column; gap: 10px; }
+.bottom-line-item { display: flex; gap: 12px; align-items: flex-start; }
+.bl-num { font-family: var(--font-mono); font-size: 10px; font-weight: 600; color: var(--teal); flex-shrink: 0; padding-top: 2px; }
+.bl-text { font-size: 12px; line-height: 1.75; color: var(--ink-mid); }
+.bl-text strong { color: var(--ink); }
+
+.brief-footer { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--rule); }
+.footer-sources { font-size: 9px; color: var(--ink-lt); line-height: 1.6; margin-bottom: 6px; }
+.footer-disc { font-size: 9px; color: rgba(122,110,101,0.7); font-style: italic; }
+
+/* ── SIGNAL VELOCITY VIEW ──────────────────── */
+#view-velocity { padding: 28px 32px 80px; }
+.vel-header { margin-bottom: 24px; }
+.vel-title { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.vel-sub { font-size: 12px; color: var(--ink-lt); line-height: 1.6; }
+
+.vel-card { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+.vel-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.vel-signal { font-size: 12px; font-weight: 600; color: var(--ink); flex: 1; line-height: 1.4; }
+.vel-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+.vb-up   { background: rgba(74,103,65,0.12); color: var(--sage); border: 1px solid rgba(74,103,65,0.3); }
+.vb-dn   { background: rgba(139,38,53,0.10); color: var(--rose); border: 1px solid rgba(139,38,53,0.25); }
+.vb-hot  { background: rgba(181,84,10,0.10); color: var(--amber); border: 1px solid rgba(181,84,10,0.3); }
+.vb-stbl { background: rgba(13,110,110,0.08); color: var(--teal); border: 1px solid rgba(13,110,110,0.25); }
+.vel-bar-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.vel-label { font-size: 9px; color: var(--ink-lt); min-width: 110px; }
+.vel-bar-bg { flex: 1; height: 5px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+.vel-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.vbar-teal  { background: var(--teal); }
+.vbar-amber { background: var(--amber); }
+.vbar-rose  { background: var(--rose); }
+.vbar-sage  { background: var(--sage); }
+.vel-pct { font-family: var(--font-mono); font-size: 10px; font-weight: 600; min-width: 32px; text-align: right; }
+.vel-note { font-size: 11px; color: var(--ink-lt); line-height: 1.65; }
+
+/* ── NARRATIVE MAP VIEW ─────────────────────── */
+#view-narrative { padding: 28px 32px 80px; }
+.narr-header { margin-bottom: 24px; }
+.narr-title { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.narr-sub { font-size: 12px; color: var(--ink-lt); line-height: 1.6; }
+.narr-timeline { margin-bottom: 28px; }
+.narr-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+@media (max-width: 680px) { .narr-cards { grid-template-columns: 1fr; } }
+@media (max-width: 900px) and (min-width: 680px) { .narr-cards { grid-template-columns: 1fr 1fr; } }
+.narr-card { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; }
+.narr-card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.narr-card-name { font-size: 11px; font-weight: 600; color: var(--ink); }
+.narr-badge { font-size: 8px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 3px; flex-shrink: 0; }
+.nb-acc  { background: rgba(74,103,65,0.12); color: var(--sage); border: 1px solid rgba(74,103,65,0.3); }
+.nb-build{ background: rgba(13,110,110,0.10); color: var(--teal); border: 1px solid rgba(13,110,110,0.3); }
+.nb-risk { background: rgba(139,38,53,0.10); color: var(--rose); border: 1px solid rgba(139,38,53,0.25); }
+.nb-watch{ background: rgba(181,84,10,0.10); color: var(--amber); border: 1px solid rgba(181,84,10,0.3); }
+.narr-card-body { font-size: 11px; line-height: 1.65; color: var(--ink-mid); margin-bottom: 8px; }
+.narr-card-driver { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-lt); margin-bottom: 2px; }
+.narr-card-driver-val { font-size: 9px; color: var(--teal); }
+</style>
+</head>
+<body>
+<div id="shell">
+
+<!-- TOPBAR -->
+<header id="topbar">
+  <div class="topbar-left">
+    <div class="topbar-wordmark">AURI<span>VIAN</span></div>
+    <div class="topbar-divider"></div>
+    <span class="topbar-product">Pulse Intelligence</span>
+    <span class="gsk-chip">GSK</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-date">July 11, 2026 &middot; 7:00 AM EDT</span>
+    <button class="btn-listen" id="listen-btn" onclick="openAudio()">
+      <span class="listen-dot"></span> Listen
+    </button>
+  </div>
+</header>
+
+<!-- SIDEBAR TOGGLE -->
+<button id="sidebar-toggle" onclick="toggleSidebar()">&#8249;</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-inner">
+
+    <div class="sidebar-section-label">Today's Briefs</div>
+
+    <div class="brief-card active" onclick="switchBrief(this, 'blenrep')">
+      <span class="new-dot"></span>
+      <div class="brief-card-title">Blenrep Comeback — DREAMM-7/8 OS Benefit</div>
+      <div class="brief-card-meta">Blenrep &middot; BCMA ADC &middot; MO2 Low</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'zamagni')">
+      <span class="new-dot"></span>
+      <div class="brief-card-title">Dr. Zamagni — Bispecific Divergence Alert</div>
+      <div class="brief-card-meta">Bologna &middot; 69&#8594;44 &middot; 10-Week Gap</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'jemperli')">
+      <span class="new-dot"></span>
+      <div class="brief-card-title">Jemperli — dMMR Pan-Tumor Testing Gap</div>
+      <div class="brief-card-meta">Jemperli &middot; MO3 Low &middot; GI/Thoracic Oncology</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'nucala')">
+      <div class="brief-card-title">Nucala vs Dupixent — T2 Breadth Rebuttal</div>
+      <div class="brief-card-meta">Nucala &middot; MO1 Sufficient &middot; EGPA/HES/CRSwNP</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'zejula')">
+      <div class="brief-card-title">Zejula 1L — BRCA Testing Access Gap</div>
+      <div class="brief-card-meta">Zejula &middot; MO4 Sufficient &middot; Community GYN Onc</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'benlysta')">
+      <div class="brief-card-title">Benlysta LN — Earlier-Line Window Closing</div>
+      <div class="brief-card-meta">Benlysta &middot; MO5 Gap &middot; SLE / Lupus Nephritis</div>
+    </div>
+
+    <div class="sidebar-rule"></div>
+
+    <div class="sidebar-section-label">Views</div>
+    <div class="nav-item active" id="nav-brief" onclick="showView('brief', this)"><span class="nav-icon">&#9632;</span> Morning Brief</div>
+    <div class="nav-item" id="nav-velocity" onclick="showView('velocity', this)"><span class="nav-icon">&#8599;</span> Signal Velocity</div>
+    <div class="nav-item" id="nav-narrative" onclick="showView('narrative', this)"><span class="nav-icon">&#9685;</span> Narrative Map</div>
+
+    <div class="sidebar-rule"></div>
+
+    <div class="sidebar-section-label">Platform</div>
+    <a class="nav-item" href="https://aurivian-gsk-demo.vercel.app" target="_blank" rel="noopener noreferrer"><span class="nav-icon">&#9675;</span> Link to Aurivian</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- ══ VIEW: BRIEFS ══════════════════════════ -->
+  <div id="view-brief" class="view active">
+
+  <!-- ── BRIEF 1: Blenrep Comeback ────────────── -->
+  <div id="brief-blenrep" class="brief-content active" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Blenrep &middot; Belantamab Mafodotin</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 7:00 AM EDT</span>
+    </div>
+
+    <h1 class="brief-headline">
+      DREAMM-7 and DREAMM-8 show OS benefit. Blenrep is back on formulary. <em>The window to re-engage KOLs who disengaged during the withdrawal is open — and closing within 6 months.</em>
+    </h1>
+
+    <p class="brief-lede">Belantamab mafodotin's voluntary withdrawal in 2022 disrupted prescriber relationships that took years to build. The DREAMM-7 (BelVd vs Vd, R/R MM) and DREAMM-8 (BelPd vs BPd, R/R MM) trials established an overall survival benefit that enabled FDA readmission in November 2023. Most KOLs who deprioritised Blenrep during the withdrawal have not yet had a structured scientific re-engagement. The Zamagni divergence alert is the canary: bispecific antibodies are actively filling the space Blenrep vacated. MSLs have a 6-month window before that preference calcifies.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Blenrep (belantamab mafodotin)</span></div>
+      <div class="meta-item"><span class="meta-label">MO Status</span><span class="meta-value warn">&#9679; MO2 Low · 34% Coverage</span></div>
+      <div class="meta-item"><span class="meta-label">Re-engagement Window</span><span class="meta-value warn">&#9679; 6 Months · Narrowing</span></div>
+      <div class="meta-item"><span class="meta-label">Trial Evidence</span><span class="meta-value dim">DREAMM-7 + DREAMM-8 OS</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; 4 Active Signals This Week</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> Blenrep's voluntary withdrawal in August 2022 — after accelerated approval conditional trial failed — damaged credibility with the MM oncology community. DREAMM-7 OS data (presented ASH 2023, published NEJM Jan 2024) changed the evidence landscape: 18-month PFS 36% vs 13% for VBd arm, OS HR 0.77. DREAMM-8 (pomalidomide backbone) confirmed the combination strategy. FDA readmission Nov 2023 reset the regulatory status. But KOL relationships are not automatically restored by data. Dr. Zamagni's alignment decline from 69 to 44 over 60 days — with public posts favouring bispecifics — is the clearest signal that Blenrep's credibility is not yet rebuilt with key influencers.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Clinical Data · DREAMM-7 OS</span></div>
+      <h2 class="section-h2">DREAMM-7: OS HR 0.77 in R/R MM. <em>The survival benefit is now the lead message — not just response rates.</em></h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; Prioritised · MO2 Recovery</span><span class="pill pill-watch">NEJM Jan 2024</span></div>
+      <p class="section-body">DREAMM-7 (NCT04246De, Phase III, 494 patients) compared belantamab mafodotin plus bortezomib/dexamethasone (BelVd) versus bortezomib/daratumumab/dexamethasone (DVd) in patients with R/R MM after 1+ prior lines. Primary endpoint: PFS. Median PFS BelVd 36.6 months vs VBd 13.4 months (HR 0.41, p&lt;0.001). OS data at 24-month follow-up: HR 0.77 — a statistically meaningful survival advantage. The key MSL messaging pivot: DREAMM-7 is not a comeback story based on hope, it is a PFS and OS story backed by Phase III data. Bispecific antibodies (teclistamab, talquetamab) do not yet have comparable Phase III OS data in this setting.</p>
+      <div class="pull-quote">
+        <p class="pull-quote-text">"The DREAMM-7 PFS data are unlike anything we've seen in the bortezomib backbone setting. The question now is how to position Blenrep alongside bispecifics — not instead of them."</p>
+        <span class="pull-quote-cite">— MM KOL commentary post-ASCO 2026 &middot; US Academic Medical Centre</span>
+      </div>
+      <table class="comp-matrix">
+        <thead>
+          <tr><th>Evidence Parameter</th><th>Blenrep (BelVd) — DREAMM-7</th><th>Bispecifics (teclistamab) — MajesTEC-1</th></tr>
+        </thead>
+        <tbody>
+          <tr class="hl"><td>Phase III OS data</td><td class="chk">HR 0.77 ✓</td><td class="crs">Phase I/II only ✗</td></tr>
+          <tr><td>Median PFS</td><td class="chk">36.6 months ✓</td><td>11.8 months (early line)</td></tr>
+          <tr><td>Principal toxicity</td><td>Keratopathy — grade 2+ 21%</td><td>CRS — grade 1/2 72%</td></tr>
+          <tr><td>Ophthalmology monitoring</td><td>Required (co-manage)</td><td>Not required</td></tr>
+          <tr><td>FDA approval setting</td><td class="chk">R/R MM (post-1L) ✓</td><td>R/R MM (post-4L)</td></tr>
+        </tbody>
+      </table>
+      <div class="sources">
+        <span class="source-chip">DREAMM-7 — NEJM Jan 2024</span>
+        <span class="source-chip">MajesTEC-1 — NEJM Nov 2022</span>
+        <span class="source-chip">MSL Insight AI1 + AI7 — Prioritised</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">Since Blenrep returned to formulary, have you had a chance to review the DREAMM-7 OS data — and how are you currently thinking about the positioning of BCMA ADCs versus bispecific antibodies in your R/R MM patients after first line?</p>
+      </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- S02 -->
+    <div class="brief-section" style="animation-delay:0.10s">
+      <div class="section-number"><span class="section-num">02</span><span class="section-cat">Toxicity Reframing · Keratopathy Management</span></div>
+      <h2 class="section-h2">Keratopathy vs CRS: the real comparison is management burden, not incidence. <em>Co-management with ophthalmology changes the risk calculus.</em></h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; KIT Alert · 65% Mention Surge</span><span class="pill pill-alert">&#9660; Perception Risk</span></div>
+      <p class="section-body">Blenrep ocular toxicity mentions have surged 65% in 30 days, driven by KOLs publicly comparing keratopathy grade 2+ rates (21% in DREAMM-7) against bispecific CRS profiles. The comparison is being framed poorly: grade 2+ keratopathy with a co-management protocol is typically reversible on dose modification; CRS grade 1/2 (72% with teclistamab) is more frequent but generally manageable in an inpatient step-up setting. The MSL frame should not minimise keratopathy — it should reposition it as a managed, reversible event within a validated ophthalmology co-management protocol, not an unmanageable toxicity that disqualifies the product.</p>
+      <div class="alert-box">
+        <div class="alert-label">&#9650; LUCA Alert — Zamagni Divergence</div>
+        <p class="alert-text"><strong>Dr. Elena Zamagni (Bologna) has posted twice on X/LinkedIn comparing Blenrep keratopathy unfavourably to bispecific CRS.</strong> Alignment score has dropped from 69 to 44 over 60 days. Last MSL contact: 10 weeks ago. As one of Europe's most influential MM voices, her framing is seeding into Italian and European academic MM networks. DREAMM-7 scientific exchange must be scheduled this week.</p>
+      </div>
+      <div class="sources">
+        <span class="source-chip">ARIA KIT — Blenrep Ocular Toxicity Mgmt</span>
+        <span class="source-chip">LUCA Alert — Zamagni Jul 8, 2026</span>
+        <span class="source-chip">Blenrep EU SmPC — Ophthalmology Protocol</span>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 4 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Deploy the Blenrep keratopathy vs CRS comparative management guide</strong> to all MM MSLs before end of day. Lead with DREAMM-7 OS HR 0.77 — then address toxicity in co-management frame.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Schedule a scientific exchange with Dr. Elena Zamagni</strong> (Bologna) this week. Present DREAMM-7 OS data and ophthalmology co-management protocol. 10 weeks of silence during a divergence event is too long.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Commission a DREAMM-7 OS one-page briefing card</strong> for community MM oncologists — plain framing, no jargon. Phase III OS data in this line is Blenrep's single strongest differentiator.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">04</span><span class="bl-text"><strong>Identify 3–5 MM centres with established ophthalmology partnerships</strong> and use them as reference sites for keratopathy co-management — peer-to-peer evidence carries more weight than MSL framing.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: DREAMM-7 Phase III (NCT04246034, NEJM Jan 2024); DREAMM-8 Phase III; MajesTEC-1 (teclistamab, NEJM Nov 2022); ARIA KIT Blenrep Ocular Toxicity Mgmt; LUCA alert Zamagni Jul 8, 2026; MSL insights AI1, AI5, AI7.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for GSK Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 2: Zamagni Divergence ──────────── -->
+  <div id="brief-zamagni" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-alert">Divergence Alert</span>
+      <span class="tag tag-product">Blenrep &middot; Multiple Myeloma</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 7:00 AM EDT</span>
+    </div>
+
+    <h1 class="brief-headline">
+      Dr. Elena Zamagni's alignment has dropped from 69 to 44 in 60 days. <em>Her bispecific advocacy is reaching the European MM network — and the last MSL contact was 10 weeks ago.</em>
+    </h1>
+
+    <p class="brief-lede">Dr. Elena Zamagni (IRCCS Azienda Ospedaliero-Universitaria di Bologna) is one of Europe's most-cited multiple myeloma investigators and a highly networked voice within the Italian and European haematology communities. Over the past 60 days she has published two LinkedIn posts and one X thread explicitly comparing Blenrep's keratopathy burden to the CRS profile of bispecific antibodies, framing the latter as more manageable in routine clinical practice. Her last MSL contact was 10 weeks ago — a critical gap during a period of active divergence. With ESMO 2026 (Berlin, September) approaching, her narrative is seeding into European MM abstract discussions.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">KOL</span><span class="meta-value">Dr. Elena Zamagni</span></div>
+      <div class="meta-item"><span class="meta-label">Alignment Trend</span><span class="meta-value warn">&#9679; 69 → 44 · Declining</span></div>
+      <div class="meta-item"><span class="meta-label">Last Contact</span><span class="meta-value warn">&#9679; 10 Weeks · At Risk</span></div>
+      <div class="meta-item"><span class="meta-label">Network Reach</span><span class="meta-value dim">Italian MM · European Academic</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; LUCA Divergence Alert · Jul 8, 2026</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> Zamagni's influence score (83) and academic network position make her a multiplier. When she publicly frames a product unfavourably, that framing reaches Italian myeloma fellows, European collaborative group investigators, and abstracts submitted to EHA and ESMO. She is not merely one KOL — she is a narrative node. The specific claim she is amplifying (keratopathy grade 2+ is more burdensome than bispecific CRS in routine practice) is clinically arguable but not settled. A structured DREAMM-7 OS scientific exchange, presenting the ophthalmology co-management protocol from Bologna's own institution, is the recommended intervention. The Blenrep re-engagement window is 6 months. She is 10 weeks uncontacted. Act now.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">LUCA Analysis · Divergence Timeline</span></div>
+      <h2 class="section-h2">The 60-day divergence timeline: <em>KarMMa-3 data in April, first bispecific post in May, second post in June — a compounding pattern, not a one-off.</em></h2>
+      <div class="pills"><span class="pill pill-alert">&#9650; Divergence · Accelerating</span><span class="pill pill-hot">&#8593; European Network Risk</span></div>
+      <p class="section-body">LUCA's alignment reconstruction shows three inflection points. First: KarMMa-3 extended analysis (ide-cel) presented at EHA 2026 in June — Zamagni engaged heavily in the discussion, posting positively about BCMA cell therapy. Second: May 14, LinkedIn post asking "Is keratopathy monitoring in 2026 really simpler than step-up CRS management?" — reached 4,800 impressions, 31 reshares within European MM community. Third: June 22, X thread detailing a clinical case where Blenrep was deprioritised in favour of teclistamab due to patient reluctance for ophthalmology co-monitoring. Two posts in 40 days is a pattern. Absence of MSL contact during this period means the narrative has propagated without counterbalance.</p>
+      <div class="pull-quote">
+        <p class="pull-quote-text">"In routine Bologna practice, the step-up hospitalisation for bispecifics is now a known process. Patients tolerate it. The keratopathy monitoring asks something different — it asks the patient to commit to ophthalmology co-management indefinitely. That's a different conversation."</p>
+        <span class="pull-quote-cite">— Dr. Elena Zamagni, X (Twitter), June 22, 2026 — Inferred from LUCA social monitoring</span>
+      </div>
+      <div class="sources">
+        <span class="source-chip">LUCA Divergence Alert — Jul 8, 2026</span>
+        <span class="source-chip">Social Monitoring — LinkedIn May 14, X Jun 22</span>
+        <span class="source-chip">EHA 2026 — KarMMa-3 Extended Analysis</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Recommended MSL Opening</div>
+        <p class="fvq-text">Dr. Zamagni, I noticed your recent posts on keratopathy monitoring compared to bispecific step-up — your clinical framing reflects exactly the kind of real-world complexity we want to understand. I'd like to share the DREAMM-7 OS data and the Bologna ophthalmology co-management protocol we've refined since readmission. Would you have 30 minutes this week or next?</p>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Priority Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Contact Dr. Zamagni this week — do not wait for ESMO.</strong> Assign the EU MSL (Dr. Priya Nair) and loop in medical director support if needed for a direct scientific exchange invitation.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Prepare a DREAMM-7 OS scientific exchange deck in Italian</strong> — or at minimum with Italian institution-specific co-management data from Bologna's oncology-ophthalmology pathway. Local data always wins.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Monitor her European network for narrative propagation.</strong> Identify the 3–4 ESMO 2026 abstract authors who have engaged with her posts — those are the secondary containment contacts.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: LUCA divergence alert Jul 8, 2026; social monitoring LinkedIn May 14 + X Jun 22, 2026; EHA 2026 KarMMa-3 session; DREAMM-7 Phase III NEJM Jan 2024; ARIA European MM KOL network mapping.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for GSK Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 3: Jemperli dMMR ────────────────── -->
+  <div id="brief-jemperli" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Jemperli &middot; dostarlimab &middot; dMMR Pan-Tumor</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 7:00 AM EDT</span>
+    </div>
+
+    <h1 class="brief-headline">
+      dMMR testing is expanding beyond colorectal — but Jemperli is not top of mind outside endometrial cancer. <em>Three independent tumor board sources confirm the gap.</em>
+    </h1>
+
+    <p class="brief-lede">The FDA's tumor-agnostic pembrolizumab approval normalised MSI-H/dMMR testing across solid tumors. As testing expands into gastric, biliary, and other tumor types, the opportunity window for Jemperli's pan-tumor dMMR claim is opening. But MSL field reports from three independent sources — GI tumor boards at Memorial Sloan Kettering, MD Anderson, and the Ohio State University — confirm that when dMMR is identified in a non-endometrial solid tumor, Jemperli is not routinely considered. Pembrolizumab dominates the conversation by default, with oncologists unaware of the RUBY data or the Jemperli dMMR pan-tumor label expansion.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Jemperli (dostarlimab)</span></div>
+      <div class="meta-item"><span class="meta-label">MO Status</span><span class="meta-value warn">&#9679; MO3 Low · 28% Coverage</span></div>
+      <div class="meta-item"><span class="meta-label">Gap Source</span><span class="meta-value warn">&#9679; 3 GI Tumor Board Reports</span></div>
+      <div class="meta-item"><span class="meta-label">Opportunity</span><span class="meta-value dim">dMMR Testing · Non-EC Solid Tumors</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; AI3 Validated · 3 Independent Sources</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> Jemperli received dMMR/MSI-H pan-tumor approval based on RUBY and additional cohort data. But the Jemperli brand was built in endometrial cancer — and GYN MSLs are not reaching GI or thoracic oncologists who are now ordering dMMR tests. The penetration gap is structural: the wrong MSLs are in the wrong tumor board rooms. Pembrolizumab has 10 years of brand recognition in the tumor-agnostic space. Jemperli needs proactive tumor board engagement by GI-familiar MSLs to establish presence before dMMR testing becomes commoditised and pembrolizumab is the reflexive choice for all non-EC dMMR tumors.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Testing Gap · MSL Field Reports</span></div>
+      <h2 class="section-h2">GI and thoracic tumor boards are ordering dMMR tests — then defaulting to pembrolizumab without Jemperli consideration. <em>The issue is brand recognition, not evidence quality.</em></h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; Prioritised · AI3 Validated</span><span class="pill pill-watch">3 Tumor Board Sources</span></div>
+      <p class="section-body">Insight AI3 was validated at recurrence 3 across MSL networks from three major academic cancer centres. The pattern is consistent: GI oncologists conduct dMMR/MSI-H testing as part of standard molecular profiling for colorectal, gastric, biliary, and pancreatic tumors. When results return dMMR positive, the treating oncologist defaults to pembrolizumab (Keytruda) — citing the FDA tumor-agnostic approval and established clinical experience. Jemperli is not mentioned at the tumor board, not in the treatment algorithm printout, and not in the oncologist's mental framework for dMMR outside of endometrial cancer. This is a presence problem, not an evidence problem: RUBY showed a 28.4-month PFS vs 5.6 months with carboplatin/paclitaxel in dMMR EC, and the pan-tumor dMMR label is FDA-approved.</p>
+      <div class="sources">
+        <span class="source-chip">MSL Insight AI3 — Validated</span>
+        <span class="source-chip">RUBY Phase III — NEJM 2023</span>
+        <span class="source-chip">FDA Jemperli Pan-Tumor dMMR Approval</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">When your tumor board identifies a dMMR result in a GI or thoracic case, what checkpoint inhibitor comes up first in the treatment discussion — and has Jemperli ever been raised as an alternative or been part of the conversation?</p>
+      </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- S02 -->
+    <div class="brief-section" style="animation-delay:0.10s">
+      <div class="section-number"><span class="section-num">02</span><span class="section-cat">Strategic Response · Tumor Board Engagement</span></div>
+      <h2 class="section-h2">The fix is not more data — it is the right MSL in the right tumor board. <em>GI-familiar field team members need to own the non-EC dMMR rooms.</em></h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; Priority Action</span><span class="pill pill-new">&#9650; MO3 Recovery Path</span></div>
+      <p class="section-body">The structural gap requires a structural fix: GI and thoracic oncology MSLs — not the existing GYN team — need to be the primary relationship owners at GI tumor boards where dMMR testing is occurring. This is a field team coverage problem. In parallel, a Jemperli pan-tumor dMMR educational toolkit should be developed that positions Jemperli alongside (not against) pembrolizumab, framing it as a validated option in any dMMR tumor type — while anchoring on the RUBY OS signal for context. The goal is not to displace pembrolizumab from GI oncology; it is to establish Jemperli as a legitimate, considered option when dMMR is found.</p>
+      <div class="sources">
+        <span class="source-chip">Action A5 — Tumor Board Partner Programme</span>
+        <span class="source-chip">Action A6 — Jemperli Pan-Tumor Toolkit</span>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Map the dMMR testing volumes by cancer centre</strong> — identify the top 10 GI tumor boards by annual dMMR-positive case load. These are the A5 priority sites.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Partner with GI tumor board chairs at MSK, MD Anderson, and Ohio State</strong> on a dMMR/MSI-H discussion framework that explicitly includes Jemperli alongside pembrolizumab in the dMMR algorithm.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Develop the Jemperli pan-tumor toolkit (A6)</strong> — one-page dMMR decision guide for non-EC oncologists. Target: six cancer centre tumor boards before ESMO 2026 Berlin.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: MSL Insight AI3 — validated at recurrence 3; RUBY Phase III dostarlimab (NEJM 2023); FDA dMMR/MSI-H pan-tumor approval; ARIA dMMR testing adoption KIT; MSL field reports from MSK, MD Anderson, Ohio State GI tumor board monitoring.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for GSK Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 4: Nucala vs Dupixent ───────────── -->
+  <div id="brief-nucala" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Nucala &middot; mepolizumab &middot; T2 Inflammation</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 7:00 AM EDT</span>
+    </div>
+
+    <h1 class="brief-headline">
+      Dupixent's EGPA label expansion is expected in Q3 2026. <em>Nucala's 4-indication breadth is the differentiator — but most KOLs only know Nucala for severe asthma.</em>
+    </h1>
+
+    <p class="brief-lede">Dupilumab (Dupixent) has systematically expanded its label into eosinophilic territories that Nucala pioneered: asthma, then CRSwNP, then EGPA (Phase III results Q3 2026). The competitive pressure is real, but it creates an opportunity to re-brief the T2 respiratory community on what Nucala uniquely offers: four approved indications (SEA, EGPA, HES, CRSwNP) across the full eosinophilic spectrum, with evidence in conditions where dupilumab does not yet have a label. Insight AI2 has reached recurrence 4: most physicians encounter Nucala in the asthma conversation and stop. The multi-indication cascade conversation is underexposed.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Nucala (mepolizumab)</span></div>
+      <div class="meta-item"><span class="meta-label">MO Status</span><span class="meta-value">MO1 Sufficient · 62% Coverage</span></div>
+      <div class="meta-item"><span class="meta-label">Competitive Threat</span><span class="meta-value warn">&#9679; Dupixent EGPA Q3 2026</span></div>
+      <div class="meta-item"><span class="meta-label">Insight Recurrence</span><span class="meta-value dim">AI2 · Recurrence 4 · Prioritised</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; Dupilumab EGPA — Approaching Label Expansion</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> Dupilumab's Phase III EGPA data are expected Q3 2026. If positive, it will have asthma + CRSwNP + EGPA — three of Nucala's four indications. The window to cement Nucala's position in EGPA and HES specialist thinking is the next 3–6 months. Nucala's HES (hypereosinophilic syndrome) indication remains unique — dupilumab has no HES data or approval, and this should be established before dupilumab expands its narrative into eosinophilic disease more broadly. Allergists and pulmonologists tend to default to the biologic they know best in asthma — the HES conversation needs to move them beyond that reflex.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Indication Breadth · Multi-Indication Cascade</span></div>
+      <h2 class="section-h2">The Nucala cascade: SEA → EGPA → HES → CRSwNP. <em>Four indications across the eosinophilic spectrum — most KOLs are not receiving the full cascade in the first two interactions.</em></h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; AI2 Prioritised · Recurrence 4</span><span class="pill pill-watch">4 Approved Indications</span></div>
+      <p class="section-body">Insight AI2 has been validated across 4 regional MSL networks: when Nucala is introduced to allergists and pulmonologists, the conversation focuses on severe eosinophilic asthma. EGPA is mentioned in fewer than 30% of second interactions; HES is mentioned in under 15% of interactions across all visit types. The eosinophil biology is the same across all four conditions — mepolizumab's IL-5 targeting mechanism is the connective thread. The cascade conversation is not complicated; it is simply not happening. Action A3 (multi-indication conversation guide) is the structural fix. A4 (eosinophil threshold engagement with respiratory KOLs) is the field activation piece.</p>
+      <table class="comp-matrix">
+        <thead>
+          <tr><th>Indication</th><th>Nucala (mepolizumab)</th><th>Dupixent (dupilumab)</th></tr>
+        </thead>
+        <tbody>
+          <tr class="hl"><td>Severe eosinophilic asthma</td><td class="chk">FDA-approved ✓</td><td class="chk">FDA-approved ✓</td></tr>
+          <tr><td>EGPA (eosinophilic granulomatosis)</td><td class="chk">FDA-approved ✓</td><td>Phase III pending Q3 2026</td></tr>
+          <tr class="hl"><td>HES (hypereosinophilic syndrome)</td><td class="chk">FDA-approved ✓</td><td class="crs">No data ✗</td></tr>
+          <tr><td>CRSwNP</td><td class="chk">FDA-approved ✓</td><td class="chk">FDA-approved ✓</td></tr>
+          <tr class="hl"><td>Eosinophil mechanism</td><td>Anti-IL-5 (mepolizumab)</td><td>Anti-IL-4Rα (dupilumab)</td></tr>
+        </tbody>
+      </table>
+      <div class="sources">
+        <span class="source-chip">MSL Insight AI2 — Prioritised · Recurrence 4</span>
+        <span class="source-chip">Dupilumab EGPA — Phase III Expected Q3 2026</span>
+        <span class="source-chip">Nucala HES EU/US Label</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">When you see a patient with eosinophilic disease — whether it's severe asthma, EGPA, or HES — how do you currently decide between an IL-5 pathway inhibitor and an IL-4Rα inhibitor, and does the indication-specific evidence change your thinking?</p>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Deploy the Nucala multi-indication cascade conversation guide (A3)</strong> to all immunology MSLs — must be in the field before dupilumab EGPA data land Q3 2026. Nucala's EGPA position must be established, not defended.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Identify EGPA and HES specialist clinics</strong> and initiate Nucala HES conversations now — HES is Nucala's only indication without direct dupilumab competition, and it is chronically under-briefed.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Engage respiratory KOLs on eosinophil threshold guidance (A4)</strong> across all 4 indications — the threshold conversation positions Nucala as the eosinophil biology expert, not just a severe asthma biologic.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: MSL Insight AI2 — Prioritised recurrence 4; Nucala FDA label (SEA/EGPA/HES/CRSwNP); Dupixent label (asthma/CRSwNP/EGPA Phase III); ARIA Nucala T2 Breadth KIT; Action A3 multi-indication guide status.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for GSK Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 5: Zejula BRCA ──────────────────── -->
+  <div id="brief-zejula" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Zejula &middot; niraparib &middot; Ovarian Cancer</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 7:00 AM EDT</span>
+    </div>
+
+    <h1 class="brief-headline">
+      Community GYN oncologists want to use PARP inhibitors in first-line maintenance — but lack CDx access infrastructure for BRCA testing. <em>The gap is workflow, not science.</em>
+    </h1>
+
+    <p class="brief-lede">Zejula's 1L maintenance approval (PRIMA trial: niraparib vs placebo, all-comers, including BRCA-unselected patients) created a differentiated clinical opportunity — PARP inhibition before BRCA results are known, then dose-adjusted based on HRD status. But MSL field reports confirm a structural barrier in community GYN oncology: BRCA companion diagnostic testing is not built into the standard-of-care workflow at community sites. Patients complete cytoreductive surgery and systemic therapy and are being sent home without initiating 1L maintenance because the oncologist has not yet received CDx results. Action A7 (CDx access support programme) is the direct fix.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Zejula (niraparib)</span></div>
+      <div class="meta-item"><span class="meta-label">MO Status</span><span class="meta-value">MO4 Sufficient · 58% Coverage</span></div>
+      <div class="meta-item"><span class="meta-label">Gap Type</span><span class="meta-value warn">&#9679; CDx Workflow · Community Sites</span></div>
+      <div class="meta-item"><span class="meta-label">Opportunity</span><span class="meta-value dim">PRIMA All-Comers Label</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; AI4 Validated · Community Oncology</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> PRIMA demonstrated that niraparib provided PFS benefit even in BRCA-negative/HRD-negative patients (though HRD-positive patients benefited most). This all-comers label is Zejula's commercial differentiation — it allows initiation of PARP maintenance without waiting for BRCA results, then dose adjustment at 3 months. But community GYN oncologists are not using this label because they don't have the CDx infrastructure to complete the BRCA test before the patient disengages post-surgery. The access support programme (A7) — which facilitates rapid CDx ordering through a simplified laboratory network — has been piloted at 6 community sites with positive adoption. This is the model to scale.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">CDx Access Gap · MSL Insight AI4</span></div>
+      <h2 class="section-h2">The BRCA testing workflow is not set up for community oncology speed. <em>PRIMA's all-comers label is the solution — community oncologists don't know they can start without waiting.</em></h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; AI4 Validated</span><span class="pill pill-watch">PRIMA All-Comers Label</span></div>
+      <p class="section-body">Insight AI4 was validated at recurrence 2 across community GYN oncology networks. The specific barrier: post-cytoreductive-surgery patients are typically discharged within 4–6 days. BRCA germline results from a standard laboratory take 10–21 business days. Community oncologists are not comfortable initiating 1L PARP maintenance before results return, and patients are not returning for a separate appointment when the result arrives. PRIMA's trial design — all-comers initiation, dose adjusted at 3 months based on HRD status — directly addresses this: the oncologist can start Zejula on day 28 post-surgery, regardless of BRCA status, and adjust the dose when results arrive. Most community oncologists are not aware this is how PRIMA was designed.</p>
+      <div class="sources">
+        <span class="source-chip">PRIMA Phase III — NEJM 2019</span>
+        <span class="source-chip">MSL Insight AI4 — Validated</span>
+        <span class="source-chip">Action A7 — CDx Access Programme (6 Sites)</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">In your community practice, what is the typical time from completing cytoreductive surgery to receiving BRCA/HRD results — and does the wait for CDx results affect your decision to initiate first-line maintenance PARP therapy?</p>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Scale Action A7 (CDx access programme) from 6 to 20 community GYN oncology sites</strong> by end of Q3. The pilot data are compelling — rapid CDx ordering + PRIMA all-comers framing is the complete package.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Brief community GYN oncology MSLs on the PRIMA all-comers initiation principle</strong> — many MSLs are also not leading with this message and are defaulting to BRCA-positive enrichment conversations only.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Identify the top 15 community GYN oncology practices by annual ovarian cancer case load</strong> — prioritise A7 site rollout by volume. These are the sites where PARP initiation gaps have the most patient impact.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: PRIMA Phase III niraparib (NEJM 2019); MSL Insight AI4 — validated; Action A7 CDx access programme pilot (6 sites, Q2 2026); ARIA PARP 1L Maintenance KIT; community GYN oncology MSL field network reports.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for GSK Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 6: Benlysta LN ──────────────────── -->
+  <div id="brief-benlysta" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Benlysta &middot; belimumab &middot; Lupus Nephritis</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 7:00 AM EDT</span>
+    </div>
+
+    <h1 class="brief-headline">
+      Rheumatologists are initiating Benlysta after 2+ lines of failure for lupus nephritis. <em>The label supports earlier use — and the biology makes a stronger argument at line 1.</em>
+    </h1>
+
+    <p class="brief-lede">Benlysta's lupus nephritis approval (BLISS-LN Phase III) demonstrated a statistically significant primary efficacy renal response at 104 weeks in patients receiving standard-of-care background therapy. The approved population includes new-onset LN. Yet MSL field reports and the MO5 Gap designation (19% coverage) confirm that rheumatologists are not initiating Benlysta earlier in the LN disease course — they are waiting until the patient has failed mycophenolate mofetil and hydroxychloroquine, often 2+ years into LN management. This is a prescribing inertia problem, not a label problem. The earlier-line biological rationale is scientifically stronger: BLyS suppression at diagnosis interrupts B-cell pathology before irreversible renal fibrosis develops.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Benlysta (belimumab)</span></div>
+      <div class="meta-item"><span class="meta-label">MO Status</span><span class="meta-value warn">&#9679; MO5 Gap · 19% Coverage</span></div>
+      <div class="meta-item"><span class="meta-label">Insight</span><span class="meta-value dim">AI6 — Prescribing Inertia</span></div>
+      <div class="meta-item"><span class="meta-label">Opportunity</span><span class="meta-value dim">Earlier-Line LN Initiation</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; MO5 Gap · Lowest Coverage in Portfolio</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> MO5 (Benlysta LN earlier-line) is the only Gap-status MO in the GSK portfolio at 19% coverage. The gap is explained by prescribing conservatism among rheumatologists: they view biologics as step-up therapy after standard immunosuppressants have had time to work. This conservatism is understandable but counterproductive in LN where early B-cell suppression may prevent the renal fibrosis that drives long-term organ damage. Insight AI6 was generated from triaged reports — it needs promotion to Validated and an MSL re-briefing campaign (A9) before next ACR congress. The goal is to shift the clinical framing from "add Benlysta when failing" to "add Benlysta at initiation of background therapy."</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Clinical Evidence · BLISS-LN Earlier-Line Rationale</span></div>
+      <h2 class="section-h2">BLyS suppression at diagnosis: <em>the biological argument for earlier Benlysta is stronger before renal fibrosis has established.</em></h2>
+      <div class="pills"><span class="pill pill-watch">BLISS-LN Phase III</span><span class="pill pill-new">MO5 Gap Recovery</span></div>
+      <p class="section-body">BLISS-LN enrolled patients with active LN receiving background standard of care (MMF or cyclophosphamide + hydroxychloroquine). The primary efficacy renal response rate at 104 weeks was 43% for belimumab vs 32% for placebo (p=0.0012). Importantly, the trial included both new-onset and relapsing LN patients — the label does not require prior biologic failure or a defined number of standard-of-care cycles. The mechanistic rationale for earlier use: BLyS (B-lymphocyte stimulator) is pathogenically elevated in active LN, driving autoreactive B-cell survival and autoantibody production. Blocking BLyS at the time of LN diagnosis — before the immune cycle completes — theoretically interrupts the fibrotic pathway before it establishes. This argument is not yet embedded in rheumatology LN treatment algorithms, and MSL re-briefing (A9) is the delivery mechanism.</p>
+      <div class="sources">
+        <span class="source-chip">BLISS-LN Phase III — NEJM 2020</span>
+        <span class="source-chip">MSL Insight AI6 — Triaged</span>
+        <span class="source-chip">ACR LN Guidelines 2024</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">In your current practice, at what point in a lupus nephritis patient's course would you consider initiating Benlysta alongside standard therapy — and what would need to be true about the evidence or the patient profile for you to consider it at first presentation rather than after a period of MMF?</p>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Promote Insight AI6 from Triaged to Validated</strong> — require 2 independent rheumatologist confirmations of the prescribing inertia pattern before ACR 2026 (Nov, Washington DC). Action A9 is gated on this validation.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Develop the earlier-line Benlysta briefing (A9)</strong> anchored on BLyS biology and the BLISS-LN new-onset patient subgroup data. Lead with mechanism, not label text.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Identify 5 rheumatology LN thought leaders for an advisory board on LN initiation timing</strong> — convert the clinical conversation into a real-world evidence question: does earlier BLyS suppression correlate with lower renal fibrosis burden at 5 years? That is the MO5 study that would change practice.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: BLISS-LN Phase III (belimumab, NEJM 2020); ACR Lupus Nephritis Guidelines 2024; MSL Insight AI6 — Triaged; Action A9 Benlysta LN MSL re-briefing status; VEGA MO5 Gap coverage (19%, Q2 2026).</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for GSK Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  </div><!-- end view-brief -->
+
+  <!-- ══ VIEW: SIGNAL VELOCITY ═══════════════════ -->
+  <div id="view-velocity" class="view">
+    <div id="view-velocity" style="padding:28px 32px 80px;">
+    <div class="vel-header">
+      <div class="vel-title">Signal Velocity</div>
+      <p class="vel-sub">30-day momentum across KIT themes and competitive narrative signals. Red bars indicate risk narratives gaining speed; teal bars indicate positive GSK narratives accelerating.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top">
+        <div class="vel-signal">Bispecific antibody preference in R/R MM — post-KarMMa-3 narrative expanding into European academic network</div>
+        <span class="vel-badge vb-dn">&#9650; Risk · Rising</span>
+      </div>
+      <div class="vel-bar-wrap"><span class="vel-label">Mention volume</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:91%;"></div></div><span class="vel-pct" style="color:var(--rose)">91%</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Sentiment risk</span><div class="vel-bar-bg"><div class="vel-bar vbar-amber" style="width:78%;"></div></div><span class="vel-pct" style="color:var(--amber)">78%</span></div>
+      <p class="vel-note">Zamagni divergence is the sentinel signal. Two posts in 40 days have driven reshares across Italian and European haematology networks. Accelerating ahead of ESMO 2026 Berlin abstract submission deadline.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top">
+        <div class="vel-signal">Blenrep keratopathy mentions — KOL comparison with bispecific CRS surging 65% in 30 days</div>
+        <span class="vel-badge vb-hot">&#9650; Alert · Surge</span>
+      </div>
+      <div class="vel-bar-wrap"><span class="vel-label">Mention volume</span><div class="vel-bar-bg"><div class="vel-bar vbar-amber" style="width:84%;"></div></div><span class="vel-pct" style="color:var(--amber)">84%</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Sentiment (negative)</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:69%;"></div></div><span class="vel-pct" style="color:var(--rose)">69%</span></div>
+      <p class="vel-note">Keratopathy grade 2+ rate is the central claim in KOL comparison posts. MSL keratopathy management guide deployment (A1) is the tactical response. DREAMM-7 OS data must be the counter-narrative lead — not a keratopathy rebuttal, which appears defensive.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top">
+        <div class="vel-signal">Nucala multi-indication breadth — post-AAAAI 2026 positive momentum building among T2 specialists</div>
+        <span class="vel-badge vb-up">&#8593; Building</span>
+      </div>
+      <div class="vel-bar-wrap"><span class="vel-label">Mention volume</span><div class="vel-bar-bg"><div class="vel-bar vbar-teal" style="width:62%;"></div></div><span class="vel-pct" style="color:var(--teal)">62%</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Positive sentiment</span><div class="vel-bar-bg"><div class="vel-bar vbar-sage" style="width:71%;"></div></div><span class="vel-pct" style="color:var(--sage)">71%</span></div>
+      <p class="vel-note">AAAAI 2026 Nucala EGPA and HES session generated favourable KOL discussion. Dupixent EGPA label expansion (Q3 2026) will reset the competitive framing — use the next 60 days to reinforce Nucala's EGPA legacy and HES exclusivity.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top">
+        <div class="vel-signal">dMMR pan-tumor testing adoption — accelerating across GI and thoracic tumor boards post-FDA</div>
+        <span class="vel-badge vb-up">&#8593; Opportunity</span>
+      </div>
+      <div class="vel-bar-wrap"><span class="vel-label">Testing volume growth</span><div class="vel-bar-bg"><div class="vel-bar vbar-teal" style="width:74%;"></div></div><span class="vel-pct" style="color:var(--teal)">74%</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Jemperli awareness</span><div class="vel-bar-bg"><div class="vel-bar vbar-amber" style="width:22%;"></div></div><span class="vel-pct" style="color:var(--amber)">22%</span></div>
+      <p class="vel-note">Testing is accelerating but Jemperli awareness in non-EC tumors is at 22%. Every dMMR-positive GI/thoracic case where pembrolizumab is selected by default is a missed Jemperli opportunity. The awareness gap must be closed before testing volume normalises.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top">
+        <div class="vel-signal">Sagar Lonial public DREAMM-7 endorsement — co-authorship window open at Emory</div>
+        <span class="vel-badge vb-up">&#8593; Positive Signal</span>
+      </div>
+      <div class="vel-bar-wrap"><span class="vel-label">Network reach</span><div class="vel-bar-bg"><div class="vel-bar vbar-sage" style="width:58%;"></div></div><span class="vel-pct" style="color:var(--sage)">58%</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Engagement quality</span><div class="vel-bar-bg"><div class="vel-bar vbar-teal" style="width:82%;"></div></div><span class="vel-pct" style="color:var(--teal)">82%</span></div>
+      <p class="vel-note">Dr. Lonial posted positively about DREAMM-7 OS data following ASCO 2026. He is the highest-influence MM KOL in the US portfolio (influence score 94). The co-authorship window for a DREAMM-7 real-world commentary piece or expert perspective is open. Engage before Zamagni's European narrative gains further traction.</p>
+    </div>
+    </div>
+  </div>
+
+  <!-- ══ VIEW: NARRATIVE MAP ══════════════════════ -->
+  <div id="view-narrative" class="view">
+    <div id="view-narrative" style="padding:28px 32px 80px;">
+    <div class="narr-header">
+      <div class="narr-title">Narrative Map</div>
+      <p class="narr-sub">How the key scientific and competitive narratives are evolving across the GSK Immunology and Oncology portfolio. Each card represents a live narrative thread — status reflects current trajectory based on KOL, congress, and field intelligence.</p>
+    </div>
+
+    <div class="narr-timeline">
+      <svg width="100%" height="44" viewBox="0 0 700 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="22" x2="680" y2="22" stroke="#D4CEC4" stroke-width="1.5"/>
+        <circle cx="80"  cy="22" r="4" fill="#0D6E6E"/>
+        <circle cx="220" cy="22" r="4" fill="#B5540A"/>
+        <circle cx="360" cy="22" r="4" fill="#0D6E6E"/>
+        <circle cx="500" cy="22" r="4" fill="#B5540A"/>
+        <circle cx="640" cy="22" r="5" fill="#0D6E6E" stroke="#fff" stroke-width="1.5"/>
+        <text x="80"  y="12" text-anchor="middle" font-size="8" fill="#7A6E65" font-family="DM Mono, monospace">ASCO 2026</text>
+        <text x="220" y="12" text-anchor="middle" font-size="8" fill="#B5540A" font-family="DM Mono, monospace">KarMMa-3 EHA</text>
+        <text x="360" y="12" text-anchor="middle" font-size="8" fill="#7A6E65" font-family="DM Mono, monospace">AAAAI 2026</text>
+        <text x="500" y="12" text-anchor="middle" font-size="8" fill="#B5540A" font-family="DM Mono, monospace">Dupixent EGPA</text>
+        <text x="640" y="12" text-anchor="middle" font-size="8" fill="#0D6E6E" font-family="DM Mono, monospace">Now · Jul 2026</text>
+        <text x="80"  y="36" text-anchor="middle" font-size="7" fill="#7A6E65" font-family="DM Sans, sans-serif">Jun 2026</text>
+        <text x="220" y="36" text-anchor="middle" font-size="7" fill="#7A6E65" font-family="DM Sans, sans-serif">Jun 2026</text>
+        <text x="360" y="36" text-anchor="middle" font-size="7" fill="#7A6E65" font-family="DM Sans, sans-serif">Mar 2026</text>
+        <text x="500" y="36" text-anchor="middle" font-size="7" fill="#7A6E65" font-family="DM Sans, sans-serif">Q3 2026 (exp)</text>
+        <text x="640" y="36" text-anchor="middle" font-size="7" fill="#0D6E6E" font-family="DM Sans, sans-serif">Jul 11, 2026</text>
+      </svg>
+    </div>
+
+    <div class="narr-cards">
+      <div class="narr-card">
+        <div class="narr-card-header">
+          <span class="narr-card-name">Blenrep Comeback</span>
+          <span class="narr-badge nb-build">Building</span>
+        </div>
+        <p class="narr-card-body">DREAMM-7/8 OS data have reset the evidence base. KOL enthusiasm is cautious but positive — Lonial public post is the high-water mark. Zamagni divergence is the counter-current. Six-month window to consolidate re-engagement before bispecific preference hardens.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">DREAMM-7 OS HR 0.77 — Phase III differentiation</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header">
+          <span class="narr-card-name">Bispecific vs BCMA ADC</span>
+          <span class="narr-badge nb-risk">Risk · Accelerating</span>
+        </div>
+        <p class="narr-card-body">Zamagni divergence is the leading edge. Bispecific preference is growing in European academic MM centres, driven by real-world CRS management improvements and Phase I/II longevity data. This narrative will arrive at ESMO 2026. MSL intervention now is the circuit-breaker.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">KarMMa-3 + Zamagni social posts — EHA 2026</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header">
+          <span class="narr-card-name">Nucala T2 Breadth</span>
+          <span class="narr-badge nb-acc">Positive</span>
+        </div>
+        <p class="narr-card-body">Post-AAAAI 2026, Nucala T2 breadth narrative is gaining traction. Window to establish EGPA and HES leadership before dupilumab EGPA Phase III results land Q3 2026. HES is Nucala's unchallenged territory — must be activated now.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">AAAAI 2026 + Dupixent EGPA Q3 2026 competitive pressure</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header">
+          <span class="narr-card-name">Jemperli Pan-Tumor</span>
+          <span class="narr-badge nb-build">Building</span>
+        </div>
+        <p class="narr-card-body">dMMR testing is accelerating across GI/thoracic tumor boards. Jemperli awareness in non-EC tumors is at 22% — a dangerous lag given that pembrolizumab is reflexively selected. Tumor board engagement (A5) and the pan-tumor toolkit (A6) are the activation levers.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">FDA tumor-agnostic pembrolizumab — dMMR normalisation</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header">
+          <span class="narr-card-name">Zejula 1L BRCA</span>
+          <span class="narr-badge nb-watch">Watch</span>
+        </div>
+        <p class="narr-card-body">CDx access support (A7) is showing early positive signals at 6 pilot sites. PRIMA all-comers label is the commercial differentiator. Community GYN oncology is the scalable market — academic centres already have CDx workflow. Olaparib competitive pressure is persistent but manageable with PRIMA data.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">PRIMA all-comers label + CDx access workflow gap</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header">
+          <span class="narr-card-name">Benlysta LN Earlier-Line</span>
+          <span class="narr-badge nb-risk">Gap · Needs Action</span>
+        </div>
+        <p class="narr-card-body">MO5 is the only Gap-status MO in the portfolio (19% coverage). Prescribing inertia in rheumatology is structural — biologics are step-up therapy by default. BLISS-LN new-onset subgroup and BLyS biology rationale must be embedded in MSL re-briefing (A9) before ACR 2026 November. The earlier-line argument is mechanistically sound; it needs clinical champions.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">Rheumatology step-up inertia + BLyS biology earlier-line rationale</div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+</main><!-- end main -->
+
+</div><!-- end shell -->
+
+<!-- AUDIO BAR — must be BEFORE script -->
+<div id="audio-bar">
+  <button class="audio-play-btn" id="audio-play-btn" onclick="togglePlay()">
+    <span class="audio-play-icon" id="play-icon">&#9654;</span>
+  </button>
+  <div class="audio-meta">
+    <div class="audio-title">GSK · Pulse Intelligence</div>
+    <div class="audio-subtitle">July 11, 2026 · Aurivian Medical Intelligence</div>
+  </div>
+  <div class="audio-progress-wrap">
+    <div class="audio-track" id="audio-track" onclick="seekAudio(event)">
+      <div class="audio-fill" id="audio-fill"></div>
+    </div>
+    <div class="audio-time" id="audio-time">0:00 / 0:00</div>
+  </div>
+  <button class="audio-close" onclick="closeAudio()">&#215;</button>
+</div>
+<audio id="brief-audio" src="pulse_gsk_brief_audio.mp3" preload="metadata"></audio>
+
+<script>
+// ── VIEW SWITCHING ────────────────────────────
+function showView(viewId, navEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const target = document.getElementById('view-' + viewId);
+  if (target) target.classList.add('active');
+  if (navEl) navEl.classList.add('active');
+  if (viewId !== 'brief') {
+    document.querySelectorAll('.brief-card').forEach(c => c.classList.remove('active'));
+  }
+}
+
+// ── BRIEF SWITCHING ───────────────────────────
+function switchBrief(cardEl, briefId) {
+  document.querySelectorAll('.brief-card').forEach(c => c.classList.remove('active'));
+  cardEl.classList.add('active');
+  document.querySelectorAll('.brief-content').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById('brief-' + briefId);
+  if (target) {
+    target.classList.add('active');
+    document.getElementById('main').scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Ensure brief view is active
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const briefView = document.getElementById('view-brief');
+  if (briefView) briefView.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-brief').classList.add('active');
+}
+
+// ── SIDEBAR TOGGLE ────────────────────────────
+function toggleSidebar() {
+  const shell = document.getElementById('shell');
+  const btn = document.getElementById('sidebar-toggle');
+  shell.classList.toggle('collapsed');
+  btn.innerHTML = shell.classList.contains('collapsed') ? '&#8250;' : '&#8249;';
+}
+
+// ── AUDIO ─────────────────────────────────────
+const audio = document.getElementById('brief-audio');
+const fill  = document.getElementById('audio-fill');
+const timeEl = document.getElementById('audio-time');
+const playIcon = document.getElementById('play-icon');
+const bar   = document.getElementById('audio-bar');
+const listenBtn = document.getElementById('listen-btn');
+
+function openAudio() {
+  bar.classList.add('open');
+  listenBtn.classList.add('playing');
+  audio.play().catch(() => {});
+  updatePlayIcon();
+}
+function closeAudio() {
+  bar.classList.remove('open');
+  listenBtn.classList.remove('playing');
+  audio.pause();
+  updatePlayIcon();
+}
+function togglePlay() {
+  if (audio.paused) { audio.play().catch(() => {}); } else { audio.pause(); }
+  updatePlayIcon();
+}
+function updatePlayIcon() {
+  playIcon.innerHTML = audio.paused ? '&#9654;' : '&#10074;&#10074;';
+}
+function seekAudio(e) {
+  if (!audio.duration) return;
+  const rect = document.getElementById('audio-track').getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  audio.currentTime = pct * audio.duration;
+}
+function fmt(s) {
+  const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  fill.style.width = pct + '%';
+  timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+});
+audio.addEventListener('ended', () => {
+  updatePlayIcon();
+  fill.style.width = '0%';
+});
+audio.addEventListener('play',  updatePlayIcon);
+audio.addEventListener('pause', updatePlayIcon);
+</script>
+
+</body>
+</html>
