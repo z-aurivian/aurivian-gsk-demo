@@ -360,7 +360,7 @@ function NationalView() {
             </thead>
             <tbody>
               {(KOL_DATA || [])
-                .filter((k) => k.tier === 1 || k.tier === 2)
+                .filter((k) => k.engagementTier === 'Tier 1' || k.engagementTier === 'Tier 2')
                 .slice(0, 6)
                 .map((k) => {
                   const daysSince = Math.floor(Math.random() * 90) + 14;
@@ -369,7 +369,7 @@ function NationalView() {
                   return (
                     <tr key={k.id} className="border-t border-auri-border">
                       <td className="px-4 py-3 font-medium text-auri-text">{k.name}</td>
-                      <td className="px-4 py-3 text-auri-muted">Tier {k.tier}</td>
+                      <td className="px-4 py-3 text-auri-muted">{k.engagementTier}</td>
                       <td className="px-4 py-3 text-xs text-auri-muted">{k.institution || '—'}</td>
                       <td className="px-4 py-3 text-xs text-auri-muted">{daysSince}d ago</td>
                       <td className="px-4 py-3">
@@ -622,7 +622,7 @@ function TerritoryView() {
             </thead>
             <tbody>
               {(KOL_DATA || [])
-                .filter((k) => k.tier <= 2)
+                .filter((k) => k.engagementTier === 'Tier 1' || k.engagementTier === 'Tier 2')
                 .slice(0, msl.kolsAtRisk + 2)
                 .map((k, idx) => {
                   const days = idx < msl.kolsAtRisk ? 60 + idx * 12 : 20 + idx * 5;
@@ -631,7 +631,7 @@ function TerritoryView() {
                   return (
                     <tr key={k.id} className="border-t border-auri-border">
                       <td className="px-4 py-3 font-medium text-auri-text">{k.name}</td>
-                      <td className="px-4 py-3 text-auri-muted">Tier {k.tier}</td>
+                      <td className="px-4 py-3 text-auri-muted">{k.engagementTier}</td>
                       <td className="px-4 py-3 text-xs text-auri-muted">{k.institution || '—'}</td>
                       <td className="px-4 py-3 text-xs text-auri-muted">{days}d ago</td>
                       <td className="px-4 py-3">
