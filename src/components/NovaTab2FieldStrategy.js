@@ -6,12 +6,21 @@ import {
 } from 'lucide-react';
 import {
   MEDICAL_OBJECTIVES, COVERAGE_TARGETS, LISTENING_PRIORITIES,
-  KIT_SCORECARDS, KOL_DATA,
+  KIT_SCORECARDS, KOL_DATA, INSIGHTS, getMessagingAlignment,
 } from '../config';
 
 // ─── Mock data ─────────────────────────────────────────────────────────────
 
 const MSL_OPTIONS = ['J. Morgan — NE Region', 'S. Chen — MW Region', 'A. Patel — SE Region', 'L. Torres — SW Region', 'R. Kim — NW Region'];
+
+// LP6 is a mock gap row (mirrors NovaTab3InsightIntelligence's LP6_MOCK) — the
+// MO4 scientific-exchange listening priority has no ISP config entry because
+// it has never generated an insight.
+const LP6_MOCK = {
+  id: 'LP6', name: 'Scientific exchange barriers', moRef: 'MO4',
+  kiq: 'What barriers exist to peer-to-peer scientific exchange on complement biology?',
+  kits: ['Peer exchange protocol', 'KOL advisory panel'],
+};
 
 const MSL_PERFORMANCE = [
   { msl: 'J. Morgan', territory: 'NE Region', status: 'Excellent',    interactions: 24, target: 20, delta: '+4', qualityScore: 82, kitSignals: 3, kolsAtRisk: 1, note: 'High interaction quality. Strong pediatric evidence focus.' },
@@ -114,6 +123,20 @@ const MO_FIELD_DATA = {
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
+// Deterministic KOL→territory assignment for MSL-scoped views. KOL_DATA has
+// no territory field of its own (KOLs are global HCPs), so we derive a
+// stable per-KOL territory from an id hash — same pattern used by
+// config/messaging-alignment.js for per-KOL scores.
+function hashCode(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+function territoryForKOL(kol) {
+  return TERRITORY_LIST[hashCode(kol.id) % TERRITORY_LIST.length];
+}
+
 function SectionHeader({ icon: Icon, label, sub, right }) {
   return (
     <div className="flex items-center justify-between mb-4">
@@ -201,7 +224,7 @@ function NationalView() {
                     <div className="text-xs text-auri-muted">{row.territory}</div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${MSL_STATUS_STYLE[row.status] || ''}`}>{row.status}</span>
+                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded border whitespace-nowrap ${MSL_STATUS_STYLE[row.status] || ''}`}>{row.status}</span>
                   </td>
                   <td className="px-4 py-3 font-medium text-auri-text">{row.interactions}</td>
                   <td className={`px-4 py-3 text-sm font-medium ${row.interactions >= row.target ? 'text-emerald-600' : 'text-rose-600'}`}>{row.delta}</td>
@@ -464,7 +487,7 @@ function TerritoryView() {
               <tr className={MSL_ROW_STYLE[msl.status] || ''}>
                 <td className="px-4 py-3 font-medium text-auri-text">{msl.msl}</td>
                 <td className="px-4 py-3">
-                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${MSL_STATUS_STYLE[msl.status] || ''}`}>{msl.status}</span>
+                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded border whitespace-nowrap ${MSL_STATUS_STYLE[msl.status] || ''}`}>{msl.status}</span>
                 </td>
                 <td className="px-4 py-3 font-medium text-auri-text">{msl.interactions}</td>
                 <td className={`px-4 py-3 text-sm font-medium ${msl.interactions >= msl.target ? 'text-emerald-600' : 'text-rose-600'}`}>{msl.delta}</td>
@@ -730,6 +753,14 @@ function StrategicObjectivesMSL() {
 
 function MSLView({ selectedMSL }) {
   const msl = MSL_PERFORMANCE.find((m) => `${m.msl} — ${m.territory}` === selectedMSL) || MSL_PERFORMANCE[0];
+  const [openTopic, setOpenTopic] = useState(null);
+
+  const mslTopics = TERRITORY_HCP_TOPICS[msl.territory] || [];
+  const mslAlignmentShift = ALIGNMENT_SHIFT.filter((row) => row.msl === msl.msl);
+  const mslKitCoverage = TERRITORY_KIT_COVERAGE[msl.territory] || [];
+  const mslKOLs = (KOL_DATA || [])
+    .filter((k) => (k.engagementTier === 'Tier 1' || k.engagementTier === 'Tier 2') && territoryForKOL(k) === msl.territory)
+    .slice(0, 5);
 
   return (
     <div className="space-y-7">
@@ -768,8 +799,9 @@ function MSLView({ selectedMSL }) {
       <section>
         <SectionHeader icon={BookOpen} label="Listening Priorities & KITs" sub="ISP config · LP1–LP6" right={<ExportBtn />} />
         <div className="space-y-2">
-          {LISTENING_PRIORITIES.map((lp) => {
-            const isGap = lp.id === 'LP6' || (COVERAGE_TARGETS[lp.moRef] === 'Gap');
+          {[...LISTENING_PRIORITIES, LP6_MOCK].map((lp) => {
+            const isGap = lp.id === 'LP6';
+            const insightCount = INSIGHTS.filter((i) => i.lpRefs?.includes(lp.id)).length;
             return (
               <div key={lp.id} className={`rounded-xl border bg-auri-card p-4 ${isGap ? 'border-rose-200' : 'border-auri-border'}`}>
                 <div className="flex items-start gap-3">
@@ -778,7 +810,11 @@ function MSLView({ selectedMSL }) {
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-sm font-medium text-auri-text">{lp.name}</span>
                       <span className="text-[10px] text-auri-muted">{lp.moRef}</span>
-                      {isGap && <span className="text-[10px] font-semibold text-rose-600">0 insights · MO gap</span>}
+                      {isGap ? (
+                        <span className="text-[10px] font-semibold text-rose-600">0 insights · MO gap</span>
+                      ) : (
+                        <span className="text-[10px] text-auri-muted">{insightCount} insight{insightCount === 1 ? '' : 's'} this cycle</span>
+                      )}
                     </div>
                     <p className="text-xs text-auri-muted italic mb-1.5">"{lp.kiq}"</p>
                     <div className="flex flex-wrap gap-1">
@@ -796,6 +832,136 @@ function MSLView({ selectedMSL }) {
 
       {/* Strategic objectives — MSL click-to-expand */}
       <StrategicObjectivesMSL />
+
+      {/* HCP Scientific Impact — MSL-scoped */}
+      <section>
+        <SectionHeader icon={Target} label="HCP Scientific Impact" sub={`${msl.territory} · awareness ladder`} right={<ExportBtn />} />
+        <div className="space-y-2 mb-5">
+          {mslTopics.map((t) => {
+            const isOpen = openTopic === t.topic;
+            return (
+              <div key={t.topic} className="rounded-xl border border-auri-border bg-auri-card overflow-hidden">
+                <button
+                  className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-auri-offset transition-all"
+                  onClick={() => setOpenTopic(isOpen ? null : t.topic)}
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <span className="text-sm font-medium text-auri-text">{t.topic}</span>
+                    <span className="text-xs text-auri-muted">{t.hcpCount} HCPs</span>
+                    <span className={`text-xs font-medium ${parseFloat(t.trend) > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{t.trend} avg stage</span>
+                    <span className="text-xs text-auri-muted ml-auto">Committed: {t.confirmed}</span>
+                  </div>
+                  {isOpen ? <ChevronUp size={15} className="text-auri-muted shrink-0" /> : <ChevronDown size={15} className="text-auri-muted shrink-0" />}
+                </button>
+                {isOpen && (
+                  <div className="border-t border-auri-border p-4">
+                    <div className="flex items-end gap-2 mb-3">
+                      {t.stages.map((count, i) => (
+                        <div key={i} className="flex-1 text-center">
+                          <div className="flex items-end justify-center mb-1" style={{ height: 60 }}>
+                            <div
+                              className="w-full rounded-t bg-auri-text/80 min-h-[4px] transition-all"
+                              style={{ height: `${(count / Math.max(...t.stages, 1)) * 56}px` }}
+                            />
+                          </div>
+                          <div className="text-sm font-semibold text-auri-text">{count}</div>
+                          <div className="text-[9px] text-auri-muted leading-tight mt-0.5">{STAGE_LABELS[i]}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-xs text-auri-muted">Avg awareness stage: <strong className="text-auri-text">{t.avgStage}</strong> / 5</div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="rounded-xl border border-auri-border bg-auri-card overflow-hidden">
+          <div className="px-4 py-2.5 bg-auri-offset border-b border-auri-border text-xs uppercase tracking-wider text-auri-muted font-medium">Scientific Alignment Shift — Q1 vs Q2</div>
+          {mslAlignmentShift.length === 0 ? (
+            <div className="px-4 py-4 text-xs text-auri-muted">No HCP–pillar pairs met the minimum 2-interaction threshold this quarter for {msl.msl}.</div>
+          ) : (
+            <table className="w-full text-sm">
+              <tbody>
+                {mslAlignmentShift.map((row) => {
+                  const delta = row.q2 - row.q1;
+                  return (
+                    <tr key={row.hcp} className="border-t border-auri-border">
+                      <td className="px-4 py-3 font-medium text-auri-text w-32">{row.hcp}</td>
+                      <td className="px-4 py-3 text-xs text-auri-muted">{row.pillar}</td>
+                      <td className="px-4 py-3 text-auri-muted text-sm">{row.q1}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-1">
+                          {delta > 0 ? <TrendingUp size={13} className="text-emerald-500" /> : <TrendingDown size={13} className="text-rose-500" />}
+                          <span className={`text-sm font-semibold ${delta > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{row.q2}</span>
+                          <span className={`text-xs ml-1 ${delta > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{delta > 0 ? `+${delta}` : delta}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      {/* KIT Intelligence — CRM-scoped compact rows */}
+      <section>
+        <SectionHeader icon={Activity} label="KIT Intelligence" sub={`${msl.territory} · CRM data`} right={<ExportBtn />} />
+        <div className="space-y-1.5">
+          {KIT_SCORECARDS.map((k, i) => {
+            const TrendIcon = k.percentChange >= 0 ? TrendingUp : TrendingDown;
+            const trendColor = k.percentChange >= 0 ? 'text-emerald-600' : 'text-rose-600';
+            const covered = mslKitCoverage[i];
+            const statusStyle = {
+              Active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+              Monitor: 'bg-amber-50 text-amber-700 border-amber-200',
+              Alert: 'bg-rose-50 text-rose-700 border-rose-200',
+              Declining: 'bg-zinc-50 text-zinc-700 border-zinc-200',
+            };
+            return (
+              <div key={k.id} className="rounded-lg border border-auri-border bg-auri-card px-4 py-2.5 flex items-center gap-3">
+                <span className="text-sm font-medium text-auri-text flex-1 min-w-0 truncate">{k.name}</span>
+                <span className="text-xs text-auri-muted">{k.currentMentions} mentions</span>
+                <span className={`text-xs font-medium flex items-center gap-0.5 ${trendColor}`}><TrendIcon size={12} />{k.percentChange >= 0 ? '+' : ''}{k.percentChange.toFixed(1)}%</span>
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded border ${statusStyle[k.status] || statusStyle.Active}`}>{k.status}</span>
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded ${covered ? 'bg-auri-text text-auri-bg' : 'bg-auri-border text-auri-muted'}`}>{covered ? 'Covered' : 'Not covered'}</span>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* KOL Engagement — cards with alignment bars */}
+      <section>
+        <SectionHeader icon={AlertCircle} label="KOL Engagement" sub={`${msl.territory} · tier 1 / tier 2`} right={<ExportBtn />} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {mslKOLs.map((k) => {
+            const alignment = getMessagingAlignment(k);
+            const score = alignment?.avgScore ?? 60;
+            return (
+              <div key={k.id} className="rounded-xl border border-auri-border bg-auri-card p-3">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-sm font-medium text-auri-text truncate">{k.name}</span>
+                  <span className="text-[10px] font-medium px-1.5 py-0.5 rounded border bg-auri-text/5 text-auri-text border-auri-text/20 shrink-0">{k.engagementTier}</span>
+                </div>
+                <div className="text-xs text-auri-muted mb-2 truncate">{k.institution || '—'}</div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-1.5 bg-auri-border rounded-full overflow-hidden">
+                    <div className={`h-full ${score >= 75 ? 'bg-emerald-500' : score >= 55 ? 'bg-amber-500' : 'bg-rose-500'}`} style={{ width: `${score}%` }} />
+                  </div>
+                  <span className="text-xs text-auri-muted shrink-0">{score} alignment</span>
+                </div>
+              </div>
+            );
+          })}
+          {mslKOLs.length === 0 && (
+            <div className="text-xs text-auri-muted col-span-2">No tier 1/2 KOLs mapped to {msl.territory} this cycle.</div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

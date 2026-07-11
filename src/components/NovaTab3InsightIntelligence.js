@@ -5,7 +5,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import {
-  LISTENING_PRIORITIES, INSIGHTS,
+  LISTENING_PRIORITIES, INSIGHTS, ACTIONS,
 } from '../config';
 import { isPinned, pinInsight, unpinInsight, subscribePinned } from '../lib/journeyStore';
 
@@ -182,6 +182,28 @@ function InsightCard({ insight }) {
 
       {open && (
         <div className="border-t border-auri-border bg-auri-bg p-4">
+          {(() => {
+            const action = ACTIONS.find((a) => a.fromInsightRef === insight.id);
+            if (!action) return null;
+            const STATUS_PILL = {
+              Proposed: 'bg-auri-offset text-auri-muted border-auri-border',
+              Started:  'bg-sky-50 text-sky-700 border-sky-200',
+              Accepted: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+            };
+            return (
+              <div className="rounded-lg border-l-2 border-l-amber-300 border border-auri-border bg-amber-50/30 p-3 mb-4">
+                <div className="text-[10px] uppercase tracking-wider text-amber-700 font-semibold mb-1.5">Proposed action · {action.id}</div>
+                <p className="text-sm text-auri-text leading-relaxed mb-2">{action.title}</p>
+                <div className="flex flex-wrap items-center gap-3 text-[11px] text-auri-muted">
+                  <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${STATUS_PILL[action.status] || STATUS_PILL.Proposed}`}>{action.status}</span>
+                  <span>{action.owner || 'Owner not yet assigned'}</span>
+                  {action.dueBy && <span className="flex items-center gap-1"><Calendar size={11} /> {action.dueBy}</span>}
+                  {action.moRef && <span className="px-1.5 py-0.5 rounded border bg-auri-text/5 text-auri-text border-auri-text/20">{action.moRef}</span>}
+                </div>
+              </div>
+            );
+          })()}
+
           <div className="text-[10px] uppercase tracking-wider text-auri-muted mb-2">Source signals ({insight.sourceInsights?.length || 0})</div>
           <div className="space-y-2">
             {insight.sourceInsights?.map((s, i) => (
