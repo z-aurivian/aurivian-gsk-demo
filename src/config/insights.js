@@ -11,7 +11,7 @@ export const INSIGHTS = [
     summary: 'MM oncologists are increasingly framing Blenrep keratopathy grade 2+ rate (21% in DREAMM-7) as a more difficult tolerability burden than the CRS profile of teclistamab or talquetamab, particularly following improvements in bispecific CRS management protocols. Ophthalmology co-management is viewed as a logistical barrier in community MM centres.',
     sourceInsights: [
       { type: 'MSL interaction', role: 'MM oncologist', location: 'Houston, TX', quote: 'The keratopathy risk with Blenrep requires ophthalmology visits every 3 weeks during induction — my patients find that harder to manage than CRS in a monitored setting.', date: '2026-06-04' },
-      { type: 'Ad board', role: 'Academic MM specialist', location: 'Chicago, IL', quote: 'Teclistamab CRS is grade 1–2 in most cases, manageable without dose interruption. Keratopathy grade 2 means a 2-step dose delay — that's a very different conversation.', date: '2026-05-28' },
+      { type: 'Ad board', role: 'Academic MM specialist', location: 'Chicago, IL', quote: 'Teclistamab CRS is grade 1–2 in most cases, manageable without dose interruption. Keratopathy grade 2 means a 2-step dose delay — that\'s a very different conversation.', date: '2026-05-28' },
       { type: 'Congress debrief', role: 'GYN/MM oncologist', location: 'ASCO 2026', quote: 'Post-KarMMa-3 the narrative has shifted. The tolerability story for bispecifics has improved faster than people expected.', date: '2026-06-01' },
     ],
     status: 'Prioritised',
@@ -27,7 +27,7 @@ export const INSIGHTS = [
     recency: '2026-05',
     summary: 'Pulmonologists and allergists are aware of Nucala in severe eosinophilic asthma but do not know about EGPA, HES, or CRSwNP approvals. MSL interactions routinely surface this gap — first 1–2 calls focused only on SEA even when the patient population would include EGPA or HES candidates.',
     sourceInsights: [
-      { type: 'MSL interaction', role: 'Pulmonologist', location: 'Pittsburgh, PA', quote: 'I use Nucala for asthma. I had no idea it was approved for EGPA — I've been using rituximab off-label.', date: '2026-05-14' },
+      { type: 'MSL interaction', role: 'Pulmonologist', location: 'Pittsburgh, PA', quote: 'I use Nucala for asthma. I had no idea it was approved for EGPA — I\'ve been using rituximab off-label.', date: '2026-05-14' },
       { type: 'MSL interaction', role: 'Allergist/Immunologist', location: 'Cincinnati, OH', quote: 'CRSwNP — really? That changes who I think about it for. We have a lot of patients with both asthma and nasal polyps.', date: '2026-05-20' },
       { type: 'Ad board', role: 'Academic pulmonologist', location: 'Denver, CO', quote: 'The multi-indication story is the differentiation from dupilumab, but I don\'t see it being led in the first engagement.', date: '2026-05-07' },
       { type: 'Med Info query', role: 'Clinical pharmacist', location: 'St. Louis, MO', quote: 'Formulary committee wants a side-by-side for Nucala vs Fasenra across all approved indications — they didn\'t know Nucala had HES approval.', date: '2026-05-29' },

@@ -411,6 +411,14 @@ export const KOL_DATA = [
 ];
 
 // ============================================================================
+// Re-exports from config — required by rag.js / auriApi.js / promptBuilder.js
+// ============================================================================
+
+export { KIT_SCORECARDS } from '../config/kit-scorecards';
+
+export const COMPETITOR_DATA = {};
+
+// ============================================================================
 // Stub exports — retained for component compatibility
 // ============================================================================
 
