@@ -9,6 +9,16 @@ import {
 } from '../config';
 import { isPinned, pinInsight, unpinInsight, subscribePinned } from '../lib/journeyStore';
 
+// ACTIONS.fromInsightRef is inconsistent across demo configs — a plain id
+// ('AI1'), a '+'-joined compound id ('AI1+AI5'), or an array (['AI1','AI5'])
+// where one action addresses multiple insights. Normalise before matching.
+function actionCoversInsight(action, insightId) {
+  const ref = action.fromInsightRef;
+  if (Array.isArray(ref)) return ref.includes(insightId);
+  if (typeof ref === 'string') return ref.split('+').includes(insightId);
+  return false;
+}
+
 // ─── Mock KIQ period data (structural — override per demo) ─────────────────
 
 const KIQ_PERIOD_DATA = {
@@ -183,7 +193,7 @@ function InsightCard({ insight }) {
       {open && (
         <div className="border-t border-auri-border bg-auri-bg p-4">
           {(() => {
-            const action = ACTIONS.find((a) => a.fromInsightRef === insight.id);
+            const action = ACTIONS.find((a) => actionCoversInsight(a, insight.id));
             if (!action) return null;
             const STATUS_PILL = {
               Proposed: 'bg-auri-offset text-auri-muted border-auri-border',
