@@ -11,7 +11,7 @@ import {
 
 // ─── Mock data ─────────────────────────────────────────────────────────────
 
-const MSL_OPTIONS = ['J. Morgan — NE Region', 'S. Chen — MW Region', 'A. Patel — SE Region', 'L. Torres — SW Region', 'R. Kim — NW Region'];
+const MSL_OPTIONS = ['M. Williams — NE Region', 'A. Brooks — MW Region', 'J. Thornton — SE Region', 'C. Rivera — SW Region', 'P. Nair — NW Region'];
 
 // LP6 is a mock gap row (mirrors NovaTab3InsightIntelligence's LP6_MOCK) — the
 // MO4 scientific-exchange listening priority has no ISP config entry because
@@ -23,11 +23,11 @@ const LP6_MOCK = {
 };
 
 const MSL_PERFORMANCE = [
-  { msl: 'J. Morgan', territory: 'NE Region', status: 'Excellent',    interactions: 24, target: 20, delta: '+4', qualityScore: 82, kitSignals: 3, kolsAtRisk: 1, note: 'High interaction quality. Strong pediatric evidence focus.' },
-  { msl: 'S. Chen',   territory: 'MW Region', status: 'On track',     interactions: 19, target: 20, delta: '−1', qualityScore: 76, kitSignals: 5, kolsAtRisk: 2, note: 'Switch messaging delivery improving month-on-month.' },
-  { msl: 'A. Patel',  territory: 'SE Region', status: 'Quality gap',  interactions: 21, target: 20, delta: '+1', qualityScore: 61, kitSignals: 2, kolsAtRisk: 3, note: 'Volume adequate, quality below target. KIT alignment coaching needed.' },
-  { msl: 'L. Torres', territory: 'SW Region', status: 'Volume gap',   interactions: 14, target: 20, delta: '−6', qualityScore: 79, kitSignals: 1, kolsAtRisk: 1, note: 'Quality strong but interactions below target. Coverage review needed.' },
-  { msl: 'R. Kim',    territory: 'NW Region', status: 'Needs support',interactions: 12, target: 20, delta: '−8', qualityScore: 58, kitSignals: 2, kolsAtRisk: 4, note: 'Both volume and quality below target. Escalated to director.' },
+  { msl: 'M. Williams', territory: 'NE Region', status: 'Excellent',    interactions: 24, target: 20, delta: '+4', qualityScore: 82, kitSignals: 3, kolsAtRisk: 1, note: 'High interaction quality. Strong pediatric evidence focus.' },
+  { msl: 'A. Brooks',   territory: 'MW Region', status: 'On track',     interactions: 19, target: 20, delta: '−1', qualityScore: 76, kitSignals: 5, kolsAtRisk: 2, note: 'Switch messaging delivery improving month-on-month.' },
+  { msl: 'J. Thornton',  territory: 'SE Region', status: 'Quality gap',  interactions: 21, target: 20, delta: '+1', qualityScore: 61, kitSignals: 2, kolsAtRisk: 3, note: 'Volume adequate, quality below target. KIT alignment coaching needed.' },
+  { msl: 'C. Rivera', territory: 'SW Region', status: 'Volume gap',   interactions: 14, target: 20, delta: '−6', qualityScore: 79, kitSignals: 1, kolsAtRisk: 1, note: 'Quality strong but interactions below target. Coverage review needed.' },
+  { msl: 'P. Nair',    territory: 'NW Region', status: 'Needs support',interactions: 12, target: 20, delta: '−8', qualityScore: 58, kitSignals: 2, kolsAtRisk: 4, note: 'Both volume and quality below target. Escalated to director.' },
 ];
 
 const MSL_STATUS_STYLE = {
@@ -107,11 +107,11 @@ const TERRITORY_KIT_COVERAGE = {
 };
 
 const TERRITORY_BRIEFS = {
-  'NE Region': 'NE Region is the strongest-performing territory this cycle — 24 interactions, quality score 82. J. Morgan is driving KIT signal coverage across 3 topics. Pediatric evidence (LP5) is the standout theme: 3 MSL interactions captured this cycle alone. One tier-1 KOL (Dr. Hayes) has shown a +9-point alignment shift on P1. No KOL engagement gaps.',
+  'NE Region': 'NE Region is the strongest-performing territory this cycle — 24 interactions, quality score 82. M. Williams is driving KIT signal coverage across 3 topics. Pediatric evidence (LP5) is the standout theme: 3 MSL interactions captured this cycle alone. One tier-1 KOL has shown a strong positive alignment shift this quarter — see Scientific Alignment Shift below. No KOL engagement gaps.',
   'MW Region': 'MW Region is on track with 19 interactions and quality score 76. Switch messaging delivery (MO2) is improving. 5 KIT signals captured — highest in any territory this cycle. Two tier-1 KOLs are at engagement risk (>45 days since last contact). Switch inertia remains the dominant theme: "if it\'s not broken" appeared in 3 separate field reports.',
-  'SE Region': 'SE Region shows a quality gap — 21 interactions (above target) but quality score of 61, below the 75 threshold. A. Patel has strong congress-sourced signal capture but KIT alignment in MSL interactions is inconsistent. Three KOLs at engagement risk. C5 in gMG is the strongest awareness topic with the highest avg stage nationally (3.2).',
-  'SW Region': 'SW Region is showing a volume gap — only 14 interactions against a target of 20. Quality score is strong at 79. One tier-1 KOL at risk. L. Torres has captured the highest per-interaction quality in the team but needs territory coverage expansion. Patient advocacy signals are emerging.',
-  'NW Region': 'NW Region requires immediate support — 12 interactions (60% of target) and quality score 58. R. Kim has 4 tier-1/2 KOLs with no substantive contact in the past 60 days. KIT coverage dots are below all other territories. Escalated to field director. Director brief and coaching plan recommended before next cycle.',
+  'SE Region': 'SE Region shows a quality gap — 21 interactions (above target) but quality score of 61, below the 75 threshold. J. Thornton has strong congress-sourced signal capture but KIT alignment in MSL interactions is inconsistent. Three KOLs at engagement risk. C5 in gMG is the strongest awareness topic with the highest avg stage nationally (3.2).',
+  'SW Region': 'SW Region is showing a volume gap — only 14 interactions against a target of 20. Quality score is strong at 79. One tier-1 KOL at risk. C. Rivera has captured the highest per-interaction quality in the team but needs territory coverage expansion. Patient advocacy signals are emerging.',
+  'NW Region': 'NW Region requires immediate support — 12 interactions (60% of target) and quality score 58. P. Nair has 4 tier-1/2 KOLs with no substantive contact in the past 60 days. KIT coverage dots are below all other territories. Escalated to field director. Director brief and coaching plan recommended before next cycle.',
 };
 
 const MO_FIELD_DATA = {
