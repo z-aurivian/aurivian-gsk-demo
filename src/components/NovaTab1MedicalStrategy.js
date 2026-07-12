@@ -25,8 +25,8 @@ const INSIGHT_LOOPS = [
   {
     id: 'IL1', tactic: 'Evidence Generation', moRef: 'MO1',
     signals: [
-      { source: 'MSL interaction', msl: 'J. Morgan', territory: 'NE Region', date: '2026-06-04', text: 'Community haematologists asking for pediatric 3-year retention data before enrolling. "We won\'t enrol without it."' },
-      { source: 'Congress debrief', msl: 'A. Patel', territory: 'SE Region', date: '2026-05-28', text: 'AAN satellite symposium: 4 of 6 panellists cited NMOSD long-term RWE gap as the main sequencing barrier.' },
+      { source: 'MSL interaction', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-06-04', text: 'Community haematologists asking for pediatric 3-year retention data before enrolling. "We won\'t enrol without it."' },
+      { source: 'Congress debrief', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-05-28', text: 'AAN satellite symposium: 4 of 6 panellists cited NMOSD long-term RWE gap as the main sequencing barrier.' },
     ],
     novaSynthesis: 'Pattern across 2 source types: pediatric and NMOSD long-term evidence are the primary barriers to MO1 progress. Confidence: 82%.',
     insight: { id: 'AI2', confidence: 0.82, status: 'Validated', title: 'RWE gap — long-term NMOSD outcomes', summary: 'NMOSD specialists sequencing C5 vs IL-6 vs CD19 without head-to-head long-term data. Retention and relapse-free survival data requested.' },
@@ -37,9 +37,9 @@ const INSIGHT_LOOPS = [
   {
     id: 'IL2', tactic: 'Field Medical Engagement', moRef: 'MO2',
     signals: [
-      { source: 'MSL interaction', msl: 'S. Chen', territory: 'MW Region', date: '2026-06-10', text: '"Patients who are stable are stable — I don\'t want to mess with it, even though the dosing interval would be easier."' },
-      { source: 'Med Info query', msl: 'L. Torres', territory: 'SW Region', date: '2026-06-01', text: 'Infusion centre nurse asked for a switch protocol sheet she can hand to scheduling staff.' },
-      { source: 'Ad board', msl: 'K. Davis', territory: 'National', date: '2026-05-20', text: '"Switching data convincing on paper but we need a cleaner community-facing algorithm."' },
+      { source: 'MSL interaction', msl: 'P. Nair', territory: 'EU Immunology', date: '2026-06-10', text: '"Patients who are stable are stable — I don\'t want to mess with it, even though the dosing interval would be easier."' },
+      { source: 'Med Info query', msl: 'J. Thornton', territory: 'US Oncology SE', date: '2026-06-01', text: 'Infusion centre nurse asked for a switch protocol sheet she can hand to scheduling staff.' },
+      { source: 'Ad board', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-05-20', text: '"Switching data convincing on paper but we need a cleaner community-facing algorithm."' },
     ],
     novaSynthesis: 'Switching inertia is framing-based, not knowledge-based. Community language adaptation is the critical lever. Confidence: 87%.',
     insight: { id: 'AI1', confidence: 0.87, status: 'Prioritised', title: 'Infusion-burden concern persists', summary: 'Community haematologists cite biweekly infusion burden as a decision point, but switching inertia remains high even where switching is appropriate.' },
@@ -50,9 +50,9 @@ const INSIGHT_LOOPS = [
   {
     id: 'IL3', tactic: 'Medical Education', moRef: 'MO2',
     signals: [
-      { source: 'MSL interaction', msl: 'R. Kim', territory: 'NW Region', date: '2026-06-08', text: 'GP registrar asked for patient FAQs for switch discussion. "Something the patient can take home."' },
-      { source: 'MSL interaction', msl: 'B. Walker', territory: 'NE Region', date: '2026-05-30', text: '"The switch FAQ on the portal is written for consultants, not patients."' },
-      { source: 'MSL interaction', msl: 'T. Evans', territory: 'SE Region', date: '2026-05-22', text: 'Three infusion centres requested co-creation of patient-friendly switch materials. Offering to join review panel.' },
+      { source: 'MSL interaction', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-06-08', text: 'GP registrar asked for patient FAQs for switch discussion. "Something the patient can take home."' },
+      { source: 'MSL interaction', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-05-30', text: '"The switch FAQ on the portal is written for consultants, not patients."' },
+      { source: 'MSL interaction', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-05-22', text: 'Three infusion centres requested co-creation of patient-friendly switch materials. Offering to join review panel.' },
     ],
     novaSynthesis: 'Three independent signals from different territories, same gap: patient-facing switch language is absent. Co-creation opportunity with community HCPs. Confidence: 91%.',
     insight: { id: 'AI4', confidence: 0.91, status: 'Prioritised', title: 'Switch-stability concerns from community centres', summary: 'Community infusion centres want a patient-facing switch-stability narrative; current MSL materials read as academic.' },
@@ -63,7 +63,7 @@ const INSIGHT_LOOPS = [
   {
     id: 'IL4', tactic: 'Scientific Communications', moRef: 'MO3',
     signals: [
-      { source: 'Congress debrief', msl: 'A. Patel', territory: 'SE Region', date: '2026-06-05', text: 'gMG guideline steering member: "Bring us the refractory subgroup data and we have something to work with. The current language is too hedged."' },
+      { source: 'Congress debrief', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-06-05', text: 'gMG guideline steering member: "Bring us the refractory subgroup data and we have something to work with. The current language is too hedged."' },
     ],
     novaSynthesis: 'Single high-credibility signal from a guideline steering member. Low volume but high strategic value — this is a gating signal for MO3 progress. Confidence: 71%.',
     insight: { id: 'AI3', confidence: 0.71, status: 'Triaged', title: 'gMG guideline positioning opportunity', summary: 'Current gMG guidelines position C5 inhibition neutrally. Steering-committee KOLs open to strengthening with additional refractory-subgroup evidence.' },
@@ -91,8 +91,8 @@ const MAO_TABLE = [
 const AUDIT_TRAILS = {
   MO1: {
     rawSignals: [
-      { source: 'MSL interaction', msl: 'J. Morgan', territory: 'NE Region', date: '2026-06-04', text: 'Community haematologists asking for pediatric 3-year retention data before enrolling.' },
-      { source: 'Congress debrief', msl: 'A. Patel', territory: 'SE Region', date: '2026-05-28', text: 'AAN 2026: 4 of 6 panellists cited NMOSD long-term RWE gap as sequencing barrier.' },
+      { source: 'MSL interaction', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-06-04', text: 'Community haematologists asking for pediatric 3-year retention data before enrolling.' },
+      { source: 'Congress debrief', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-05-28', text: 'AAN 2026: 4 of 6 panellists cited NMOSD long-term RWE gap as sequencing barrier.' },
     ],
     synthesis: { text: 'Pattern across MSL and congress sources: long-term evidence gaps in rare subpopulations are the primary barrier to MO1 progress.', confidence: 0.82, checks: ['MSL field reports', 'AAN congress abstracts', 'Prior-cycle literature scan'] },
     insight: { id: 'AI2', confidence: 0.82, status: 'Validated', title: 'RWE gap — long-term NMOSD outcomes', summary: 'NMOSD specialists making sequencing decisions without head-to-head long-term data.' },
@@ -101,9 +101,9 @@ const AUDIT_TRAILS = {
   },
   MO2: {
     rawSignals: [
-      { source: 'MSL interaction', msl: 'S. Chen', territory: 'MW Region', date: '2026-06-10', text: '"Patients who are stable are stable — I don\'t want to mess with it."' },
-      { source: 'Med Info query', msl: 'L. Torres', territory: 'SW Region', date: '2026-06-01', text: 'Infusion centre nurse asked for switch protocol she can hand to scheduling.' },
-      { source: 'Ad board', msl: 'K. Davis', territory: 'National', date: '2026-05-20', text: '"Switching data convincing on paper but we need a cleaner community-facing algorithm."' },
+      { source: 'MSL interaction', msl: 'P. Nair', territory: 'EU Immunology', date: '2026-06-10', text: '"Patients who are stable are stable — I don\'t want to mess with it."' },
+      { source: 'Med Info query', msl: 'J. Thornton', territory: 'US Oncology SE', date: '2026-06-01', text: 'Infusion centre nurse asked for switch protocol she can hand to scheduling.' },
+      { source: 'Ad board', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-05-20', text: '"Switching data convincing on paper but we need a cleaner community-facing algorithm."' },
     ],
     synthesis: { text: 'Switching inertia is framing-based, not knowledge-based. Community language adaptation is the critical lever.', confidence: 0.87, checks: ['MSL interaction corpus', 'Med Info query log', 'Ad board transcript'] },
     insight: { id: 'AI1', confidence: 0.87, status: 'Prioritised', title: 'Infusion-burden concern persists', summary: 'Community haematologists cite biweekly infusion burden as a decision point but switching inertia remains high.' },

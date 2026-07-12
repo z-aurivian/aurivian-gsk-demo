@@ -16,12 +16,12 @@ export const VEGA_AWARENESS_PROGRESSION = {
 
 // 1.2 Interaction Quality vs Quantity — by MSL/Region.
 export const VEGA_INTERACTION_QUALITY = {
-  insight: 'Dr. Priya Nair (EU Immunology) shows high interaction volume but conversations are not converting to KIQ insights — likely conducting relationship maintenance rather than structured KIQ discussions. Marcus Williams (US Oncology NE) has a volume gap; Q2 interactions 28% below target. Joint field visit with regional lead recommended for both.',
+  insight: 'Dr. Priya Nair (EU Immunology) shows high interaction volume but conversations are not converting to KIQ insights — likely conducting relationship maintenance rather than structured KIQ discussions. Dr. Marcus Williams (US Oncology NE) has a volume gap; Q2 interactions 28% below target. Joint field visit with regional lead recommended for both.',
   rows: [
-    { msl: 'Sarah Chen',       region: 'US Immunology West',   interactions: 51, vsTarget: '+7%',  quality: 8.6, insightRate: 79, overall: 'Excellent'    },
-    { msl: 'Marcus Williams',  region: 'US Oncology NE',       interactions: 34, vsTarget: '-28%', quality: 8.1, insightRate: 74, overall: 'Volume gap'    },
+    { msl: 'Dr. Sarah Chen',    region: 'US Immunology West',   interactions: 51, vsTarget: '+7%',  quality: 8.6, insightRate: 79, overall: 'Excellent'    },
+    { msl: 'Dr. Marcus Williams', region: 'US Oncology NE',     interactions: 34, vsTarget: '-28%', quality: 8.1, insightRate: 74, overall: 'Volume gap'    },
     { msl: 'Dr. Priya Nair',   region: 'EU Immunology',        interactions: 48, vsTarget: '+4%',  quality: 5.8, insightRate: 38, overall: 'Quality gap'   },
-    { msl: 'James Thornton',   region: 'US Oncology SE',       interactions: 44, vsTarget: '+2%',  quality: 8.3, insightRate: 77, overall: 'On track'      },
+    { msl: 'Dr. James Thornton', region: 'US Oncology SE',     interactions: 44, vsTarget: '+2%',  quality: 8.3, insightRate: 77, overall: 'On track'      },
     { msl: 'Dr. Amelia Brooks', region: 'US Immunology Midwest', interactions: 39, vsTarget: '-13%', quality: 9.2, insightRate: 91, overall: 'Volume gap'  },
     { msl: 'Dr. Carlos Rivera', region: 'US Oncology SW',      interactions: 46, vsTarget: '+5%',  quality: 8.8, insightRate: 84, overall: 'Excellent'    },
   ],
