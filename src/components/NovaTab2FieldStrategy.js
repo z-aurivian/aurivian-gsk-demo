@@ -52,13 +52,13 @@ const HCP_TOPICS = [
 
 const STAGE_LABELS = ['Unaware', 'Aware', 'Interested', 'Evaluating', 'Committed'];
 
-const ALIGNMENT_SHIFT = [
-  { hcp: 'Dr. Hayes',   pillar: 'P1 — C5 preference',     q1: 72, q2: 81, msl: 'J. Morgan' },
-  { hcp: 'Dr. Osei',   pillar: 'P2 — gMG guideline',      q1: 58, q2: 64, msl: 'S. Chen'   },
-  { hcp: 'Dr. Nair',   pillar: 'P1 — C5 preference',      q1: 44, q2: 41, msl: 'A. Patel'  },
-  { hcp: 'Dr. Santos', pillar: 'P3 — Pediatric evidence',  q1: 63, q2: 71, msl: 'L. Torres' },
-  { hcp: 'Dr. Larsson',pillar: 'P2 — gMG guideline',      q1: 51, q2: 50, msl: 'R. Kim'    },
-];
+// Scientific Alignment Shift — Product feedback 2026-07-12: the old mock only
+// carried one fictional KOL per MSL. Real rows are now generated from the
+// actual KOL roster (KOL_DATA) via config/messaging-alignment.js, so every
+// MSL/territory shows shift across their full assigned KOL list, not one.
+// Q2 (current) is each KOL's real per-pillar alignment score; Q1 (previous
+// quarter) is a deterministic offset off that score — same id-hash approach
+// messaging-alignment.js uses for the current-quarter numbers.
 
 const NATIONAL_METRICS = [
   { label: 'Total MSL interactions', value: '90', sub: 'this cycle' },
@@ -137,6 +137,28 @@ function territoryForKOL(kol) {
   return TERRITORY_LIST[hashCode(kol.id) % TERRITORY_LIST.length];
 }
 
+function mslNameForTerritory(territory) {
+  const m = MSL_PERFORMANCE.find((x) => x.territory === territory);
+  return m ? m.msl : territory;
+}
+
+// One row per KOL — their single largest-shift message pillar this quarter.
+function buildAlignmentShiftRows(kols) {
+  return kols
+    .map((k) => {
+      const alignment = getMessagingAlignment(k);
+      if (!alignment) return null;
+      const candidates = alignment.pillars.map((p) => {
+        const offset = (hashCode(k.id + p.id) % 25) - 12; // -12..+12
+        const q1 = Math.max(20, Math.min(98, p.score - offset));
+        return { pillar: p.short, q1, q2: p.score };
+      });
+      const row = candidates.reduce((max, r) => (Math.abs(r.q2 - r.q1) > Math.abs(max.q2 - max.q1) ? r : max), candidates[0]);
+      return { hcp: k.name, pillar: row.pillar, q1: row.q1, q2: row.q2, msl: mslNameForTerritory(territoryForKOL(k)) };
+    })
+    .filter(Boolean);
+}
+
 function SectionHeader({ icon: Icon, label, sub, right }) {
   return (
     <div className="flex items-center justify-between mb-4">
@@ -183,6 +205,12 @@ function FieldBrief({ scope }) {
 
 function NationalView() {
   const [openTopic, setOpenTopic] = useState(null);
+  const nationalAlignment = buildAlignmentShiftRows(
+    (KOL_DATA || [])
+      .filter((k) => k.engagementTier === 'Tier 1' || k.engagementTier === 'Tier 2')
+      .sort((a, b) => b.influenceScore - a.influenceScore)
+      .slice(0, 10)
+  );
 
   return (
     <div className="space-y-7">
@@ -295,7 +323,7 @@ function NationalView() {
           <div className="px-4 py-2.5 bg-auri-offset border-b border-auri-border text-xs uppercase tracking-wider text-auri-muted font-medium">Scientific Alignment Shift — Q1 vs Q2</div>
           <table className="w-full text-sm">
             <tbody>
-              {ALIGNMENT_SHIFT.map((row) => {
+              {nationalAlignment.map((row) => {
                 const delta = row.q2 - row.q1;
                 return (
                   <tr key={row.hcp} className="border-t border-auri-border">
@@ -419,7 +447,7 @@ function TerritoryView() {
   const hcpTopics = TERRITORY_HCP_TOPICS[territory] || [];
   const kitCoverage = TERRITORY_KIT_COVERAGE[territory] || [];
   const brief = TERRITORY_BRIEFS[territory] || '';
-  const territoryAlignment = ALIGNMENT_SHIFT.filter((r) => r.msl === msl.msl);
+  const territoryAlignment = buildAlignmentShiftRows((KOL_DATA || []).filter((k) => territoryForKOL(k) === territory));
 
   return (
     <div className="space-y-7">
@@ -569,7 +597,6 @@ function TerritoryView() {
                           <span className={`text-xs ml-1 ${delta > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{delta > 0 ? `+${delta}` : delta}</span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-xs text-auri-muted">{row.msl}</td>
                     </tr>
                   );
                 })}
@@ -756,7 +783,7 @@ function MSLView({ selectedMSL }) {
   const [openTopic, setOpenTopic] = useState(null);
 
   const mslTopics = TERRITORY_HCP_TOPICS[msl.territory] || [];
-  const mslAlignmentShift = ALIGNMENT_SHIFT.filter((row) => row.msl === msl.msl);
+  const mslAlignmentShift = buildAlignmentShiftRows((KOL_DATA || []).filter((k) => territoryForKOL(k) === msl.territory));
   const mslKitCoverage = TERRITORY_KIT_COVERAGE[msl.territory] || [];
   const mslKOLs = (KOL_DATA || [])
     .filter((k) => (k.engagementTier === 'Tier 1' || k.engagementTier === 'Tier 2') && territoryForKOL(k) === msl.territory)
