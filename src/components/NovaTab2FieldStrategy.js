@@ -13,13 +13,14 @@ import {
 
 const MSL_OPTIONS = ['S. Chen — US Immunology West', 'M. Williams — US Oncology NE', 'P. Nair — EU Immunology', 'J. Thornton — US Oncology SE', 'A. Brooks — US Immunology Midwest', 'C. Rivera — US Oncology SW'];
 
-// LP6 is a mock gap row (mirrors NovaTab3InsightIntelligence's LP6_MOCK) — the
-// MO4 scientific-exchange listening priority has no ISP config entry because
-// it has never generated an insight.
+// LP6 is a mock gap row (mirrors NovaTab3InsightIntelligence's LP6_MOCK) —
+// real MO5 (Benlysta lupus nephritis earlier-line identification) has no
+// listening priority coverage among the real LP1-5 (LP5 is scoped to MO2),
+// so this fills that genuine gap rather than fabricating an unrelated LP.
 const LP6_MOCK = {
-  id: 'LP6', name: 'Scientific exchange barriers', moRef: 'MO4',
-  kiq: 'What barriers exist to peer-to-peer scientific exchange on complement biology?',
-  kits: ['Peer exchange protocol', 'KOL advisory panel'],
+  id: 'LP6', name: 'Benlysta earlier-line initiation timing in lupus nephritis', moRef: 'MO5',
+  kiq: 'Are rheumatologists initiating Benlysta early enough in the lupus nephritis treatment sequence to maximise renal protection, or waiting until after 2+ lines of failure?',
+  kits: ['Earlier-line LN evidence card', 'Rheumatology MSL re-briefing deck'],
 };
 
 const MSL_PERFORMANCE = [

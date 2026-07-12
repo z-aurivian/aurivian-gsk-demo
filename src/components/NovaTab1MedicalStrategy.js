@@ -13,10 +13,10 @@ import {
 // ─── Mock data (structural — override per demo via config when needed) ────
 
 const TACTIC_POA = [
-  { id: 'T1', name: 'Evidence Generation',      Icon: Microscope, budget: '$1.8M', pct: 28, moRefs: ['MO1','MO3','MO4'], signalCount: 3, signalStatus: 'Active',  deliverables: ['RWE sub-analysis protocol', 'Registry data submission', 'Pediatric outcomes abstract'], novaSummary: 'Signal volume is high. Three field signals this cycle point to evidence gaps in rare subpopulations as the #1 barrier to MO1 progress.' },
+  { id: 'T1', name: 'Evidence Generation',      Icon: Microscope, budget: '$1.8M', pct: 28, moRefs: ['MO1','MO3','MO4'], signalCount: 3, signalStatus: 'Active',  deliverables: ['Nucala multi-indication evidence pack', 'Jemperli dMMR pan-tumor RWE summary', 'Zejula CDx access data'], novaSummary: 'Signal volume is high. Field signals this cycle point to under-communicated indication breadth as the #1 barrier to MO1 progress.' },
   { id: 'T2', name: 'Medical Education',         Icon: BookOpen,   budget: '$1.4M', pct: 22, moRefs: ['MO1','MO2'],       signalCount: 2, signalStatus: 'Monitor', deliverables: ['Switch education module', 'Community HCP webinar series', 'Switch FAQ co-creation'], novaSummary: 'Two signals: HCP-facing switch materials read as academic. Community-language adaptation is overdue.' },
-  { id: 'T3', name: 'Field Medical Engagement',  Icon: Users,      budget: '$1.6M', pct: 25, moRefs: ['MO1','MO2','MO3'], signalCount: 5, signalStatus: 'Alert',   deliverables: ['MSL interaction quality programme', 'KOL engagement plan refresh', 'Congress debrief protocol'], novaSummary: 'Highest signal volume of any tactic. Five signals flagged — MO2 switching inertia and MO3 guideline positioning are both active.' },
-  { id: 'T4', name: 'Scientific Communications', Icon: FileText,   budget: '$0.6M', pct:  9, moRefs: ['MO2','MO3','MO4'], signalCount: 1, signalStatus: 'Active',  deliverables: ['Peer-reviewed manuscript pipeline', 'Congress poster submissions', 'Scientific platform refresh'], novaSummary: 'One signal: NMOSD sequencing data gap. RWE sub-analysis scope would directly feed the manuscript pipeline.' },
+  { id: 'T3', name: 'Field Medical Engagement',  Icon: Users,      budget: '$1.6M', pct: 25, moRefs: ['MO1','MO2','MO3'], signalCount: 5, signalStatus: 'Alert',   deliverables: ['MSL interaction quality programme', 'KOL engagement plan refresh', 'Congress debrief protocol'], novaSummary: 'Highest signal volume of any tactic. Five signals flagged — MO2 Blenrep keratopathy-vs-CRS perception and MO3 Jemperli pan-tumor awareness are both active.' },
+  { id: 'T4', name: 'Scientific Communications', Icon: FileText,   budget: '$0.6M', pct:  9, moRefs: ['MO2','MO3','MO4'], signalCount: 1, signalStatus: 'Active',  deliverables: ['Peer-reviewed manuscript pipeline', 'Congress poster submissions', 'Scientific platform refresh'], novaSummary: 'One signal: dMMR pan-tumor evidence gap. Jemperli tumor board engagement would directly feed the manuscript pipeline.' },
   { id: 'T5', name: 'HEOR',                      Icon: BarChart2,  budget: '$0.5M', pct:  8, moRefs: ['MO3','MO4'],       signalCount: 0, signalStatus: 'Monitor', deliverables: ['Cost-effectiveness model update', 'Burden-of-disease publication'], novaSummary: 'No new signals this cycle. Budget allocation reviewed; no reallocation proposed.' },
   { id: 'T6', name: 'Patient Advocacy',          Icon: Heart,      budget: '$0.5M', pct:  8, moRefs: ['MO1','MO2'],       signalCount: 1, signalStatus: 'Active',  deliverables: ['Patient organisation engagement plan', 'Disease awareness co-creation'], novaSummary: 'One signal: community infusion centres requesting patient-facing materials. Aligns with MO2 switch education deliverable.' },
 ];
@@ -25,50 +25,49 @@ const INSIGHT_LOOPS = [
   {
     id: 'IL1', tactic: 'Evidence Generation', moRef: 'MO1',
     signals: [
-      { source: 'MSL interaction', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-06-04', text: 'Community haematologists asking for pediatric 3-year retention data before enrolling. "We won\'t enrol without it."' },
-      { source: 'Congress debrief', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-05-28', text: 'AAN satellite symposium: 4 of 6 panellists cited NMOSD long-term RWE gap as the main sequencing barrier.' },
+      { source: 'MSL interaction', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-05-14', text: 'I use Nucala for asthma. I had no idea it was approved for EGPA — I\'ve been using rituximab off-label.' },
+      { source: 'Ad board', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-05-07', text: 'The multi-indication story is the differentiation from dupilumab, but I don\'t see it being led in the first engagement.' },
     ],
-    novaSynthesis: 'Pattern across 2 source types: pediatric and NMOSD long-term evidence are the primary barriers to MO1 progress. Confidence: 82%.',
-    insight: { id: 'AI2', confidence: 0.82, status: 'Validated', title: 'RWE gap — long-term NMOSD outcomes', summary: 'NMOSD specialists sequencing C5 vs IL-6 vs CD19 without head-to-head long-term data. Retention and relapse-free survival data requested.' },
-    action: { title: 'Scope long-term NMOSD relapse-free RWE sub-analysis with HEOR', owner: 'HEOR', dueBy: '2026-Q4', moRef: 'MO1' },
-    loopCondition: 'RWE sub-analysis protocol approved by HEOR',
-    loopMet: false,
+    novaSynthesis: 'Pattern across MSL and ad-board sources: pulmonologists and allergists know Nucala only for severe eosinophilic asthma — EGPA, HES, and CRSwNP approvals are not surfacing in early engagement. Confidence: 88%.',
+    insight: { id: 'AI2', confidence: 0.88, status: 'Prioritised', title: 'Nucala multi-indication breadth not communicated in first 2 interactions', summary: 'Pulmonologists and allergists are aware of Nucala in severe eosinophilic asthma but do not know about EGPA, HES, or CRSwNP approvals. MSL interactions routinely surface this gap — first 1–2 calls focused only on SEA even when the patient population would include EGPA or HES candidates.' },
+    action: { title: 'Build Nucala multi-indication conversation guide (SEA→EGPA→HES→CRSwNP cascade)', owner: 'Medical Comms', dueBy: '2026-Q3', moRef: 'MO1' },
+    loopCondition: 'Multi-indication conversation guide approved and deployed to respiratory/immunology MSLs',
+    loopMet: true,
   },
   {
     id: 'IL2', tactic: 'Field Medical Engagement', moRef: 'MO2',
     signals: [
-      { source: 'MSL interaction', msl: 'P. Nair', territory: 'EU Immunology', date: '2026-06-10', text: '"Patients who are stable are stable — I don\'t want to mess with it, even though the dosing interval would be easier."' },
-      { source: 'Med Info query', msl: 'J. Thornton', territory: 'US Oncology SE', date: '2026-06-01', text: 'Infusion centre nurse asked for a switch protocol sheet she can hand to scheduling staff.' },
-      { source: 'Ad board', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-05-20', text: '"Switching data convincing on paper but we need a cleaner community-facing algorithm."' },
+      { source: 'Ad board', msl: 'C. Rivera', territory: 'US Oncology SW', date: '2026-06-04', text: 'The keratopathy risk with Blenrep requires ophthalmology visits every 3 weeks during induction — my patients find that harder to manage than CRS in a monitored setting.' },
+      { source: 'Congress debrief', msl: 'J. Thornton', territory: 'US Oncology SE', date: '2026-06-01', text: 'Post-KarMMa-3 the narrative has shifted. The tolerability story for bispecifics has improved faster than people expected.' },
     ],
-    novaSynthesis: 'Switching inertia is framing-based, not knowledge-based. Community language adaptation is the critical lever. Confidence: 87%.',
-    insight: { id: 'AI1', confidence: 0.87, status: 'Prioritised', title: 'Infusion-burden concern persists', summary: 'Community haematologists cite biweekly infusion burden as a decision point, but switching inertia remains high even where switching is appropriate.' },
-    action: { title: 'Develop community-facing switch-stability narrative', owner: 'Field Medical', dueBy: '2026-Q3', moRef: 'MO2' },
-    loopCondition: 'Switch-stability narrative reviewed, approved and deployed to MSL tablets',
-    loopMet: true,
+    novaSynthesis: 'MM oncologists increasingly frame Blenrep keratopathy as a harder tolerability burden than bispecific CRS, especially post-KarMMa-3 — a perception shift driven by real-world bispecific management improvements, not new Blenrep safety data. Confidence: 91%.',
+    insight: { id: 'AI1', confidence: 0.91, status: 'Prioritised', title: 'Blenrep keratopathy perceived as greater burden than bispecific CRS', summary: 'MM oncologists are increasingly framing Blenrep keratopathy grade 2+ rate (21% in DREAMM-7) as a more difficult tolerability burden than the CRS profile of teclistamab or talquetamab, particularly following improvements in bispecific CRS management protocols. Ophthalmology co-management is viewed as a logistical barrier in community MM centres.' },
+    action: { title: 'Deploy Blenrep keratopathy vs CRS comparative management guide to all MM MSLs', owner: 'Field Medical', dueBy: '2026-Q3', moRef: 'MO2' },
+    loopCondition: 'Keratopathy vs CRS comparative management guide approved and deployed to all MM MSLs',
+    loopMet: false,
   },
   {
     id: 'IL3', tactic: 'Medical Education', moRef: 'MO2',
     signals: [
-      { source: 'MSL interaction', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-06-08', text: 'GP registrar asked for patient FAQs for switch discussion. "Something the patient can take home."' },
-      { source: 'MSL interaction', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-05-30', text: '"The switch FAQ on the portal is written for consultants, not patients."' },
-      { source: 'MSL interaction', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-05-22', text: 'Three infusion centres requested co-creation of patient-friendly switch materials. Offering to join review panel.' },
+      { source: 'MSL interaction', msl: 'C. Rivera', territory: 'US Oncology SW', date: '2026-06-14', text: 'I know Blenrep came back — I saw the FDA approval — but I haven\'t looked at the DREAMM-7 survival data. Is there an OS benefit?' },
+      { source: 'MSL interaction', msl: 'J. Thornton', territory: 'US Oncology SE', date: '2026-06-20', text: 'My academic colleagues are excited about it but it hasn\'t reached my inbox. A one-pager would help.' },
     ],
-    novaSynthesis: 'Three independent signals from different territories, same gap: patient-facing switch language is absent. Co-creation opportunity with community HCPs. Confidence: 91%.',
-    insight: { id: 'AI4', confidence: 0.91, status: 'Prioritised', title: 'Switch-stability concerns from community centres', summary: 'Community infusion centres want a patient-facing switch-stability narrative; current MSL materials read as academic.' },
-    action: { title: 'Develop patient-facing switch FAQ (co-created with community HCPs)', owner: 'Medical Comms', dueBy: '2026-Q3', moRef: 'MO2' },
-    loopCondition: 'Switch FAQ approved, deployed to community centres and MSL tablets',
-    loopMet: false,
+    novaSynthesis: 'Community MM oncologists are aware Blenrep returned to market but have not seen the DREAMM-7 OS benefit data — the comeback story exists in academic circles but has not permeated community practice. A simple one-pager, not more data, is the ask. Confidence: 79%.',
+    insight: { id: 'AI7', confidence: 0.79, status: 'Validated', title: 'DREAMM-7 OS data not yet reaching community MM oncologists', summary: 'Community MM oncologists are not aware of the DREAMM-7 overall survival benefit (belantamab mafodotin + bortezomib/dex vs bortezomib/dex). The comeback story is present in academic KOL discussions but has not permeated into community practice.' },
+    action: { title: 'Commission DREAMM-7 OS community oncologist briefing card — one page, simple framing', owner: 'Medical Comms', dueBy: '2026-Q3', moRef: 'MO2' },
+    loopCondition: 'DREAMM-7 OS briefing card approved and distributed to community MM oncologists',
+    loopMet: true,
   },
   {
     id: 'IL4', tactic: 'Scientific Communications', moRef: 'MO3',
     signals: [
-      { source: 'Congress debrief', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-06-05', text: 'gMG guideline steering member: "Bring us the refractory subgroup data and we have something to work with. The current language is too hedged."' },
+      { source: 'MSL interaction', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-06-11', text: 'We test MSI-H for colorectal, yes, but when it comes back positive my reflex is pembrolizumab — not dostarlimab. I haven\'t seen the data for GI tumors.' },
+      { source: 'Congress debrief', msl: 'C. Rivera', territory: 'US Oncology SW', date: '2026-06-02', text: 'The pan-tumor dMMR space is busy. Jemperli needs to be in that conversation beyond the endometrial indication.' },
     ],
-    novaSynthesis: 'Single high-credibility signal from a guideline steering member. Low volume but high strategic value — this is a gating signal for MO3 progress. Confidence: 71%.',
-    insight: { id: 'AI3', confidence: 0.71, status: 'Triaged', title: 'gMG guideline positioning opportunity', summary: 'Current gMG guidelines position C5 inhibition neutrally. Steering-committee KOLs open to strengthening with additional refractory-subgroup evidence.' },
-    action: { title: 'Engage gMG guideline steering KOLs for refractory-subgroup dossier', owner: 'Medical Affairs', dueBy: 'TBD', moRef: 'MO3' },
-    loopCondition: 'Refractory-subgroup dossier submitted to guideline steering committee',
+    novaSynthesis: 'GI oncologists are not consistently discussing Jemperli for dMMR-positive colorectal or gastric patients — pembrolizumab\'s tumor-agnostic approval has normalised the biomarker concept, but Jemperli remains associated with GYN oncology only. Confidence: 84%.',
+    insight: { id: 'AI3', confidence: 0.84, status: 'Validated', title: 'dMMR testing not reflex in colorectal and gastric tumor boards', summary: 'GI oncologists are not consistently discussing Jemperli for dMMR-positive colorectal or gastric cancer patients. Pembrolizumab tumor-agnostic approval has normalised the concept but Jemperli is not top of mind outside GYN oncology, and dMMR testing is not uniformly reflex in GI tumor boards.' },
+    action: { title: 'Partner with GI tumor board chairs on dMMR/MSI-H reflex testing protocols', owner: 'Field Medical', dueBy: '2026-Q4', moRef: 'MO3' },
+    loopCondition: 'GI tumor board partnership established and first dMMR reflex-testing protocol adopted',
     loopMet: false,
   },
 ];
@@ -78,37 +77,36 @@ const MAO_METRICS = [
   { label: 'Actionable insights generated',       value: '7',   sub: '+3 vs prior cycle',   alert: false },
   { label: 'Actions initiated',                   value: '5',   sub: '71% of insights',      alert: false },
   { label: 'Tactical POA areas reshaped by AI',   value: '3',   sub: 'of 6 tactics',         alert: false },
-  { label: 'MOs with critical coverage gaps',     value: '1',   sub: 'MO4 · Gap',            alert: true  },
+  { label: 'MOs with critical coverage gaps',     value: '1',   sub: 'MO5 · Gap',            alert: true  },
 ];
 
 const MAO_TABLE = [
-  { mo: 'MO1', name: 'Real-world evidence',    signalsIn: 62, breakdown: 'MSL 48% · Congress 31% · Lit 21%', insightIds: 'AI2, AI5', actionsCount: 2, actionsInitiated: 1, coverage: 'Low',       aiImpact: 'Partial',   impactDesc: 'RWE sub-analysis scoped; registry protocol in review.' },
-  { mo: 'MO2', name: 'HCP switching education',signalsIn: 89, breakdown: 'MSL 62% · Med Info 21% · Ad board 17%', insightIds: 'AI1, AI4', actionsCount: 3, actionsInitiated: 3, coverage: 'Sufficient', aiImpact: 'Reshaped',  impactDesc: 'Switch-stability narrative reframed to community language following AI synthesis. Approved and deployed.' },
-  { mo: 'MO3', name: 'Guideline alignment',    signalsIn: 54, breakdown: 'Congress 52% · KOL 28% · Lit 20%',  insightIds: 'AI3',       actionsCount: 1, actionsInitiated: 0, coverage: 'Low',       aiImpact: 'Partial',   impactDesc: 'KOL engagement plan updated to prioritise guideline steering members. Dossier scoping underway.' },
-  { mo: 'MO4', name: 'Scientific exchange',    signalsIn: 42, breakdown: 'Congress 60% · KOL 40%',            insightIds: 'AI7',       actionsCount: 1, actionsInitiated: 1, coverage: 'Gap',       aiImpact: 'Not yet',   impactDesc: 'No plan change documented. Insight generated but not yet accepted by Medical Affairs leadership.' },
+  { mo: 'MO1', name: 'Nucala indication breadth', signalsIn: 62, breakdown: 'MSL 48% · Congress 31% · Lit 21%', insightIds: 'AI2',        actionsCount: 2, actionsInitiated: 1, coverage: 'Sufficient', aiImpact: 'Partial',   impactDesc: 'Multi-indication conversation guide deployed; respiratory KOL eosinophil-threshold engagement proposed.' },
+  { mo: 'MO2', name: 'Blenrep KOL confidence', signalsIn: 89, breakdown: 'MSL 62% · Med Info 21% · Ad board 17%', insightIds: 'AI1, AI5, AI7', actionsCount: 3, actionsInitiated: 3, coverage: 'Low', aiImpact: 'Reshaped',  impactDesc: 'Keratopathy vs CRS guide deployed; Zamagni scientific exchange scheduled; DREAMM-7 OS briefing card accepted.' },
+  { mo: 'MO3', name: 'Jemperli pan-tumor expansion', signalsIn: 54, breakdown: 'Congress 52% · KOL 28% · Lit 20%',  insightIds: 'AI3',       actionsCount: 1, actionsInitiated: 0, coverage: 'Low',       aiImpact: 'Partial',   impactDesc: 'GI tumor board partnership plan updated; dMMR pan-tumor toolkit scoping underway.' },
+  { mo: 'MO4', name: 'Zejula CDx access',    signalsIn: 42, breakdown: 'Congress 60% · KOL 40%',            insightIds: 'AI4',       actionsCount: 1, actionsInitiated: 1, coverage: 'Sufficient', aiImpact: 'Reshaped',   impactDesc: 'CDx access support programme initiated with Market Access; testing workflow embedded at pilot community sites.' },
 ];
 
 const AUDIT_TRAILS = {
   MO1: {
     rawSignals: [
-      { source: 'MSL interaction', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-06-04', text: 'Community haematologists asking for pediatric 3-year retention data before enrolling.' },
-      { source: 'Congress debrief', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-05-28', text: 'AAN 2026: 4 of 6 panellists cited NMOSD long-term RWE gap as sequencing barrier.' },
+      { source: 'MSL interaction', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-05-14', text: 'Pulmonologist using Nucala for asthma was unaware it is also approved for EGPA.' },
+      { source: 'Ad board', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-05-07', text: 'The multi-indication story is not being led in the first engagement — differentiation from dupilumab is being left on the table.' },
     ],
-    synthesis: { text: 'Pattern across MSL and congress sources: long-term evidence gaps in rare subpopulations are the primary barrier to MO1 progress.', confidence: 0.82, checks: ['MSL field reports', 'AAN congress abstracts', 'Prior-cycle literature scan'] },
-    insight: { id: 'AI2', confidence: 0.82, status: 'Validated', title: 'RWE gap — long-term NMOSD outcomes', summary: 'NMOSD specialists making sequencing decisions without head-to-head long-term data.' },
-    action: { title: 'Scope long-term NMOSD relapse-free RWE sub-analysis with HEOR', owner: 'HEOR', date: '2026-Q4', mos: ['MO1'] },
-    planChange: { when: 'June 2026', effect: 'HEOR budget increased by 8% to support sub-analysis scope. New deliverable added: relapse-free survival registry analysis.', condition: 'Sub-analysis protocol approved' },
+    synthesis: { text: 'Pattern across MSL and ad-board sources: pulmonologists and allergists know Nucala only for severe eosinophilic asthma — EGPA, HES, and CRSwNP approvals are not surfacing in early engagement.', confidence: 0.88, checks: ['MSL field reports', 'Ad board transcripts', 'Med Info query log'] },
+    insight: { id: 'AI2', confidence: 0.88, status: 'Prioritised', title: 'Nucala multi-indication breadth not communicated in first 2 interactions', summary: 'Pulmonologists and allergists are aware of Nucala in severe eosinophilic asthma but do not know about EGPA, HES, or CRSwNP approvals.' },
+    action: { title: 'Build Nucala multi-indication conversation guide (SEA→EGPA→HES→CRSwNP cascade)', owner: 'Medical Comms', date: '2026-Q3', mos: ['MO1'] },
+    planChange: { when: 'May 2026', effect: 'Multi-indication conversation guide (SEA→EGPA→HES→CRSwNP cascade) accepted by Medical Comms and fast-tracked for respiratory/immunology MSL rollout.', condition: 'Conversation guide deployed' },
   },
   MO2: {
     rawSignals: [
-      { source: 'MSL interaction', msl: 'P. Nair', territory: 'EU Immunology', date: '2026-06-10', text: '"Patients who are stable are stable — I don\'t want to mess with it."' },
-      { source: 'Med Info query', msl: 'J. Thornton', territory: 'US Oncology SE', date: '2026-06-01', text: 'Infusion centre nurse asked for switch protocol she can hand to scheduling.' },
-      { source: 'Ad board', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-05-20', text: '"Switching data convincing on paper but we need a cleaner community-facing algorithm."' },
+      { source: 'Social monitoring', msl: 'C. Rivera', territory: 'US Oncology SW', date: '2026-06-08', text: 'Dr. Elena Zamagni (LinkedIn/X): keratopathy burden of BCMA ADCs requires honest comparison to grade 1–2 CRS events with bispecifics — the management landscape has changed.' },
+      { source: 'Publication', msl: 'C. Rivera', territory: 'US Oncology SW', date: '2026-05-20', text: 'Zamagni et al., HemaSphere: ophthalmology co-management for belantamab mafodotin represents a differential access burden factoring into treatment selection.' },
     ],
-    synthesis: { text: 'Switching inertia is framing-based, not knowledge-based. Community language adaptation is the critical lever.', confidence: 0.87, checks: ['MSL interaction corpus', 'Med Info query log', 'Ad board transcript'] },
-    insight: { id: 'AI1', confidence: 0.87, status: 'Prioritised', title: 'Infusion-burden concern persists', summary: 'Community haematologists cite biweekly infusion burden as a decision point but switching inertia remains high.' },
-    action: { title: 'Develop community-facing switch-stability narrative', owner: 'Field Medical', date: '2026-Q3', mos: ['MO2'] },
-    planChange: { when: 'May 2026', effect: 'Switch-education module reframed from academic to community-HCP language. New deliverable: co-created patient FAQ. Budget reallocated from Scientific Comms (−$40K).', condition: 'Switch FAQ deployed to community centres' },
+    synthesis: { text: 'Dr. Elena Zamagni\'s public and published position — comparing Blenrep keratopathy burden unfavourably to bispecific CRS — carries real weight in the Italian and broader European MM community. Alignment score has moved from 69 to 44 in 60 days.', confidence: 0.93, checks: ['Social monitoring (LinkedIn/X)', 'HemaSphere publication', 'KOL alignment tracking'] },
+    insight: { id: 'AI5', confidence: 0.93, status: 'Prioritised', title: 'Elena Zamagni divergence — bispecific preference vocal and growing', summary: 'Dr. Elena Zamagni has published and publicly posted comparing Blenrep keratopathy burden unfavourably to bispecific CRS profiles following KarMMa-3 data.' },
+    action: { title: 'Schedule scientific exchange with Dr. Zamagni — DREAMM-7 OS data + keratopathy management protocol', owner: 'Field Medical', date: '2026-Q3', mos: ['MO2'] },
+    planChange: { when: 'June 2026', effect: 'Scientific exchange with Dr. Zamagni fast-tracked to Field Medical; DREAMM-7 OS data and keratopathy management protocol prepared as core exchange materials.', condition: 'Scientific exchange held and outcome documented' },
   },
 };
 
@@ -185,10 +183,12 @@ function NovaStrategicBrief() {
       </div>
       <p className="text-sm text-auri-text leading-relaxed">
         The strategy-to-action score stands at <strong>72/100</strong>, up 8 points from last cycle.
-        Switching inertia (MO2) remains the highest-signal theme — three independent MSL territories
-        this cycle confirmed that the barrier is framing, not clinical knowledge. The RWE gap for
-        long-term NMOSD outcomes (MO1) is emerging as the #2 priority. One critical coverage gap
-        persists: MO4 (Scientific exchange) has received no new field signals this cycle.
+        Blenrep KOL confidence (MO2) remains the highest-signal theme — community MM oncologists
+        increasingly frame keratopathy as a harder burden than bispecific CRS, and Dr. Elena Zamagni's
+        public divergence is actively spreading that narrative across the European MM community.
+        Nucala's multi-indication breadth (MO1) not surfacing in first engagements is the #2 priority.
+        One critical coverage gap persists: MO5 (Benlysta lupus nephritis earlier-line identification)
+        has no listening priority coverage in the current plan.
       </p>
     </div>
   );
@@ -714,7 +714,7 @@ function ROICalculator() {
         </div>
         <p className="text-xs text-auri-text">
           Based on signal ROI analysis, Nova recommends reallocating <strong>$120K</strong> from Scientific Communications to Field Medical Engagement and <strong>$60K</strong> to Medical Education.
-          Combined reallocation of <strong>$180K</strong> is projected to increase MO2 coverage from <strong>Sufficient → Confirmed</strong> within 2 cycles.
+          Combined reallocation of <strong>$180K</strong> is projected to increase MO2 coverage from <strong>Low → Sufficient</strong> within 2 cycles.
           Pending Medical Affairs leadership approval.
         </p>
       </div>

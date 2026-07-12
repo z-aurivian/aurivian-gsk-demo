@@ -25,75 +25,87 @@ const KIQ_PERIOD_DATA = {
   LP1: {
     status: 'new',
     thisPeriod: {
-      summary: 'Three independent MSL reports this cycle confirm community haematologists lack awareness of the long-term Ultomiris retention data. The gap is most pronounced in US Oncology NE and EU Immunology. MSLs who probed directly found HCPs defaulting to switching FAQs that cite only 2-year data.',
-      novaSynthesis: 'The intelligence picture shifted this period: awareness of the data exists among academic centres but has not transferred to community practice. The missing link is a community-appropriate evidence summary — not more data generation.',
-      keyQuote: { text: 'I know the 3-year data exists somewhere but I\'ve never seen a clean one-pager I could use in clinic.', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-06-04' },
-      actionPill: { insight: 'AI2', taken: true, label: 'RWE sub-analysis scoped' },
+      summary: 'Four MSL and ad-board reports this cycle confirm pulmonologists and allergists know Nucala only for severe eosinophilic asthma — EGPA, HES, and CRSwNP approvals are not surfacing in the first 1–2 engagements even when the patient population would qualify.',
+      novaSynthesis: 'The intelligence picture is consistent: awareness of individual indications exists in specialist literature but is not being led with in early conversations. The missing link is a structured multi-indication cascade, not more clinical data.',
+      keyQuote: { text: 'I use Nucala for asthma. I had no idea it was approved for EGPA — I\'ve been using rituximab off-label.', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-05-14' },
+      actionPill: { insight: 'AI2', taken: true, label: 'Multi-indication guide deployed' },
     },
     cumulative: {
-      summary: 'Across 3 measurement periods, community awareness of long-term Ultomiris RWE has grown from 12% to 31% of surveyed HCPs — steady progress, but below the 60% target. Academic centres are at 78%.',
-      runningInsight: 'The question has shifted from "does the data exist?" to "how do we make it accessible in community practice?" — a transition from evidence generation to education strategy.',
+      summary: 'Awareness of Nucala\'s full T2 indication breadth has been a persistent gap since the multi-indication story was first flagged — the guide is now deployed, but early engagement patterns have not yet shifted.',
+      runningInsight: 'The question has shifted from "does the differentiation story exist?" to "are MSLs actually leading with it in the first 1–2 calls?" — an execution question, not an evidence question.',
     },
   },
   LP2: {
     status: 'urgent',
     thisPeriod: {
-      summary: 'Five signals this period — highest volume of any KIQ. Hesitancy is consistently attributed to inertia, not clinical concern. The phrase "if it\'s not broken" appeared in three separate MSL reports from different regions. National alignment score for this question has regressed from 68 to 61.',
-      novaSynthesis: 'The core barrier is not knowledge of switching safety — it is the absence of a compelling framing for why to act when the status quo appears stable. Community-facing materials address the "what" but not the "why now."',
-      keyQuote: { text: 'If it\'s not broken, I\'m not going to fix it. My patients are stable and the infusion schedule is built into their routine.', msl: 'P. Nair', territory: 'EU Immunology', date: '2026-06-10' },
-      actionPill: { insight: 'AI1', taken: true, label: 'Switch narrative reframed' },
+      summary: 'Highest-engagement KIQ this period. MM oncologists are increasingly framing Blenrep keratopathy as a harder tolerability burden than bispecific CRS — three independent sources cite the post-KarMMa-3 shift in how community physicians weigh the two profiles.',
+      novaSynthesis: 'This is a live perception shift, not a static knowledge gap — bispecific CRS management has genuinely improved, and Blenrep\'s value proposition needs to be re-anchored around DREAMM-7 OS data rather than assuming keratopathy is a settled trade-off.',
+      keyQuote: { text: 'The keratopathy risk with Blenrep requires ophthalmology visits every 3 weeks during induction — my patients find that harder to manage than CRS in a monitored setting.', msl: 'C. Rivera', territory: 'US Oncology SW', date: '2026-06-04' },
+      actionPill: { insight: 'AI1', taken: true, label: 'Keratopathy vs CRS guide deployed' },
     },
     cumulative: {
-      summary: 'This has been the most persistent KIQ across all periods. The switching inertia signal first appeared in Q3 2025 and has remained the highest-recurrence theme. Despite three intervention cycles, the national hesitancy rate has only declined from 74% to 61%.',
-      runningInsight: 'The question is evolving from "what are the barriers?" to "which levers move the needle?" — the evidence is that MSL conversation quality matters more than materials availability.',
+      summary: 'This perception gap has widened since KarMMa-3 reported — bispecific tolerability has improved faster than the field anticipated, eroding one of Blenrep\'s prior relative advantages.',
+      runningInsight: 'The question is evolving from "is keratopathy manageable?" to "how does Blenrep\'s OS benefit change the tolerability trade-off calculation?" — the DREAMM-7 data is the lever, not more keratopathy management materials alone.',
     },
   },
   LP3: {
     status: 'new',
     thisPeriod: {
-      summary: 'Three MSL reports from independent territories confirmed guideline steering members are receptive to strengthening the gMG position — but require refractory-subgroup data as the evidentiary basis. The ask is specific and actionable.',
-      novaSynthesis: 'A single high-value signal from a guideline steering member has catalysed three supporting field reports. The opportunity window is narrow — the next guideline review cycle is scheduled for late 2026.',
-      keyQuote: { text: 'Bring us the refractory subgroup data and we have something to work with. The current language is too hedged.', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-06-05' },
-      actionPill: { insight: 'AI3', taken: false, label: 'KOL dossier not yet initiated' },
+      summary: 'Three MSL and congress reports confirm GI oncologists are not reflexly testing dMMR/MSI-H outside colorectal, and when they do, pembrolizumab remains the automatic choice — Jemperli is not part of the pan-tumor conversation.',
+      novaSynthesis: 'Pembrolizumab\'s tumor-agnostic approval has normalised the dMMR biomarker concept — Jemperli now needs targeted tumor-board engagement to insert itself into that conversation, rather than re-explaining the biomarker from scratch.',
+      keyQuote: { text: 'We test MSI-H for colorectal, yes, but when it comes back positive my reflex is pembrolizumab — not dostarlimab. I haven\'t seen the data for GI tumors.', msl: 'M. Williams', territory: 'US Oncology NE', date: '2026-06-11' },
+      actionPill: { insight: 'AI3', taken: false, label: 'GI tumor board partnership not yet initiated' },
     },
     cumulative: {
-      summary: 'The guideline positioning question has generated 2 insights across 3 periods, both consistent in identifying the same evidentiary gap. Progress has been slow due to the long cycle time of guideline review processes.',
-      runningInsight: 'The question has narrowed from "is there an opportunity?" to "what evidence is needed and by when?" — urgency is increasing as the 2026 review window approaches.',
+      summary: 'The pan-tumor dMMR opportunity has generated 1 consolidated insight this period — this remains an early-stage listening priority relative to the other MOs.',
+      runningInsight: 'The question has narrowed from "is dMMR testing happening?" to "which specific tumor boards should be prioritised for Jemperli engagement first?"',
     },
   },
   LP4: {
-    status: 'none',
+    status: 'new',
     thisPeriod: {
-      summary: null,
-      novaSynthesis: null,
-      keyQuote: null,
-      actionPill: null,
-      emptyReason: 'No new insights generated this period. LP4 was probed in 2 MSL interactions, but neither produced a substantive response — HCPs deferred to the last congress update. Only 1 historical insight exists for this question (Q3 2025).',
+      summary: 'Community GYN oncology sites lack an integrated CDx workflow for reflex BRCA/HRD testing at ovarian cancer diagnosis — testing is ordered ad hoc rather than built into the diagnostic protocol, delaying 1L niraparib eligibility determination.',
+      novaSynthesis: 'This is a workflow gap, not an awareness gap — academic centres already have embedded testing pathways. The fix is operational (CDx access support), not educational.',
+      keyQuote: { text: 'We order BRCA when we remember to, but it\'s not built into our diagnosis protocol. By the time results come back the patient is mid-chemotherapy.', msl: 'C. Rivera', territory: 'US Oncology SW', date: '2026-05-08' },
+      actionPill: { insight: 'AI4', taken: true, label: 'CDx access programme initiated' },
     },
     cumulative: {
-      summary: 'Only 1 insight generated since LP4 was established in Q2 2025. The question remains strategically important but MSL activation against it has been low. Territory coverage is uneven — only US Oncology SE and US Oncology NE have logged interactions on this topic.',
-      runningInsight: 'The question has not yet generated enough intelligence to establish a trajectory. Directed MSL activation is the priority before the next period.',
+      summary: 'The CDx access gap has been consistent since LP4 was established — community sites lag academic centres, and the Market Access programme launched this period is the first workflow-level intervention.',
+      runningInsight: 'The question has shifted from "is there a testing gap?" to "how quickly can the CDx access programme reach community GYN oncology sites?"',
     },
   },
   LP5: {
     status: 'new',
     thisPeriod: {
-      summary: 'Two MSL reports from US Oncology NE and EU Immunology confirmed community paediatricians lack long-term aHUS management data. Both HCPs cited the absence of 3-year retention data in a community-appropriate format as the specific gap.',
-      novaSynthesis: 'The pediatric evidence gap is both a data gap and a communication gap. The 3-year data exists but is not accessible to community paediatricians in a usable format.',
-      keyQuote: { text: 'I\'d enrol patients if I could show families a 3-year outcome summary they could understand. The trial data is too complex for a consult.', msl: 'S. Chen', territory: 'US Immunology West', date: '2026-06-08' },
-      actionPill: { insight: 'AI5', taken: false, label: 'Registry sub-analysis proposed' },
+      summary: 'Dr. Elena Zamagni\'s public and published position — favouring bispecifics over Blenrep on tolerability grounds — has generated the most consequential single-KOL signal this period. Her alignment score has moved from 69 to 44 in 60 days.',
+      novaSynthesis: 'A single high-influence KOL\'s public divergence can move faster than any materials-based intervention — the priority is direct scientific exchange addressing her specific framing before her position spreads further across the European MM network.',
+      keyQuote: { text: 'The keratopathy burden of BCMA ADCs in the DREAMM-7 era requires honest comparison to grade 1–2 CRS events with bispecifics. The management landscape has changed.', msl: 'C. Rivera', territory: 'US Oncology SW', date: '2026-06-08' },
+      actionPill: { insight: 'AI5', taken: true, label: 'Zamagni scientific exchange scheduled' },
     },
     cumulative: {
-      summary: 'LP5 was established in Q4 2025. Two insights generated across 2 periods, both pointing to the same communication gap. Community-paediatrician engagement has been lower than academic centre engagement.',
-      runningInsight: 'The question is shifting from "what is the evidence gap?" to "how do we bridge academic evidence to community practice?" — an education strategy question, not an evidence generation question.',
+      summary: 'Zamagni\'s divergence has escalated over 2 periods from a single social post to a peer-reviewed publication — the trajectory is toward broader European KOL influence, not fading.',
+      runningInsight: 'The question has moved from "does this KOL disagree?" to "how far will her published position spread before direct scientific exchange can be held?"',
+    },
+  },
+  LP6: {
+    status: 'new',
+    thisPeriod: {
+      summary: 'Two independent reports confirm rheumatologists are initiating Benlysta only after 2 or more lines of failure in lupus nephritis, missing the earlier-line window where renal protection is most impactful.',
+      novaSynthesis: 'This is the one Medical Objective with zero listening-priority coverage in the current plan — Nova is flagging it directly rather than waiting for signal volume to build organically, since MO5 is already at Gap coverage status.',
+      keyQuote: { text: 'I tend to try mycophenolate, then voclosporin, and then think about Benlysta. I hadn\'t considered it as a first-add-on.', msl: 'A. Brooks', territory: 'US Immunology Midwest', date: '2026-04-17' },
+      actionPill: { insight: 'AI6', taken: false, label: 'MSL re-briefing proposed' },
+    },
+    cumulative: {
+      summary: 'LP6 has no prior measurement periods — this is its first cycle with any signal coverage at all, reflecting MO5\'s Gap status.',
+      runningInsight: 'The question is just beginning to generate intelligence — until MSL activation increases, this will remain the thinnest-covered priority in the plan.',
     },
   },
 };
 
 const LP6_MOCK = {
-  id: 'LP6', name: 'Scientific exchange barriers', moRef: 'MO4',
-  kiq: 'What barriers exist to peer-to-peer scientific exchange on complement biology?',
-  kits: ['Peer exchange protocol', 'KOL advisory panel'],
+  id: 'LP6', name: 'Benlysta earlier-line initiation timing in lupus nephritis', moRef: 'MO5',
+  kiq: 'Are rheumatologists initiating Benlysta early enough in the lupus nephritis treatment sequence to maximise renal protection, or waiting until after 2+ lines of failure?',
+  kits: ['Earlier-line LN evidence card', 'Rheumatology MSL re-briefing deck'],
 };
 
 const STATUS_CONFIG = {
@@ -380,11 +392,13 @@ export default function NovaTab3InsightIntelligence() {
           <span className="text-[10px] text-violet-500 ml-1">AI-generated · on load</span>
         </div>
         <p className="text-sm text-auri-text leading-relaxed">
-          This period, <strong>4 of 6 KIQs</strong> generated new insights. LP2 (switch-patient confidence) is flagged
-          <strong> Urgent</strong> — national alignment regressed from 68 to 61 despite active interventions.
-          LP4 (NMOSD treatment paradigm) and LP6 (scientific exchange barriers) have generated
-          no intelligence this cycle; directed MSL activation is recommended for both.
-          The highest-confidence insight this period is <strong>AI4</strong> (91% confidence, LP1/LP2 intersection).
+          This period, <strong>all 6 KIQs</strong> generated new insights — including LP6, newly activated
+          against MO5's Gap coverage. LP2 (Blenrep ocular toxicity perception) is flagged
+          <strong> Urgent</strong> — Dr. Elena Zamagni's public divergence is actively spreading her
+          keratopathy-vs-CRS framing across the European MM community and requires direct scientific exchange.
+          LP6 (Benlysta earlier-line initiation) remains the thinnest-covered question in the plan, consistent
+          with MO5's Gap status. The highest-confidence insight this period is <strong>AI5</strong> (93% confidence,
+          LP5) — the Zamagni divergence signal.
         </p>
       </div>
 
